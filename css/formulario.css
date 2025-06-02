@@ -2,9 +2,9 @@
       font-family: 'minecraft';
       src: url(/fonts/MinecraftRegular-Bmg3.otf);
     }
-    
+
     body {
-      font-family:sans-serif;
+      font-family: sans-serif;
       margin: 0;
       padding: 0;
       background-size: cover;
@@ -18,37 +18,30 @@
 
 
     header {
-      padding: 20px;
-      color: rgb(0, 0, 0);
-      background-image: url(/images/placa2.png);
+      padding: 30px;
+      background-image: url(/images/placa3.png);
       background-color: transparent;
       background-repeat: no-repeat;
       background-position: center;
-      background-size: contain;
+      background-size: contain; 
     }
-    
-    header h1 {
-      margin-top: 50px;
-      font-size: 20px;
-      text-align: center;
-}
 
-    h3{
+    h3 {
       text-align: center;
       margin-top: 0px;
     }
 
-.formulario-container {
-    color: white;
-    background-color: #76767671;
-    border-radius: 10px;
-    border: black 3px solid;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
+    .formulario-container {
+      color: white;
+      background-color: #76767671;
+      border-radius: 10px;
+      border: black 3px solid;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
 
-}
+    }
 
     .form-group {
       margin-bottom: 15px;
@@ -77,53 +70,55 @@
       text-align: center;
     }
 
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
 
-.form-actions button,
-a.voltar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'minecraft';
-  padding: 10px 25px;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 15px;
-  text-decoration: none;
-  transition: background-image 0.3s ease-in-out;
-  height: 38px;
-  min-width: 100px;
-}
-.form-actions button:hover,
-a.voltar:hover {
-  background-image: url('/images/butao1.png');
-}
+    .form-actions button,
+    a.voltar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'minecraft';
+      padding: 10px 25px;
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      text-decoration: none;
+      transition: background-image 0.3s ease-in-out;
+      height: 38px;
+      min-width: 100px;
+    }
 
-.form-actions button {
-  background-image: url('/images/butao2.png');
-}
+    .form-actions button:hover,
+    a.voltar:hover {
+      background-image: url('/images/butao1.png');
+    }
 
-a.voltar {
-  background-image: url('/images/butao2.png');
-}
+    .form-actions button {
+      background-image: url('/images/butao2.png');
+    }
+
+    a.voltar {
+      background-image: url('/images/butao2.png');
+    }
 
 
     footer {
       text-align: center;
-      padding: 10px;
-      font-size: 14px;
-      background-color: #eee;
+      padding: 5px;
+      font-size: 10px;
+      background-color: #76767671;
       margin-top: 40px;
+      border:rgba(0, 0, 0, 0.5) 2px solid;
     }
 
     .form-group {

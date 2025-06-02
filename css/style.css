@@ -65,9 +65,14 @@
 
   .link {
     margin-top: 15px;
+    font-size: 10px;
+    text-decoration: underline;
     display: block;
-    color: #007bff;
-    text-decoration: none;
+    color: #552d00;
+  }
+
+  .link:hover {
+    color: #000000;
   }
 
   .error {

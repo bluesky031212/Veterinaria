@@ -1,49 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Clínica Pet Vida - Agendamento</title>
   <link rel="stylesheet" href="/css/formulario.css">
 </head>
+
 <body>
   <header>
     <h1></h1>
-    
   </header>
 
   <div class="formulario-container">
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLScIoRma24ZlZfzvb8sbjFp18bE5nQ0QUQthGljV0m3kmS1SZA/formResponse" method="POST" target="invisible" onsubmit="return validarFormulario()">
-      <h3>Dados do Dono</h3>
+    <h3>Dados do Dono</h3>
+    <form action="agendamento.php" method="POST">
       <div class="form-group">
         <label>Nome completo *</label>
-        <input type="text" name="entry.408489645" required>
+        <input type="text" required>
       </div>
       <div class="form-group">
         <label>Telefone *</label>
-        <input type="tel" name="entry.1992355283" required>
+        <input type="tel" required>
       </div>
       <div class="form-group">
         <label>E-mail *</label>
-        <input type="email" id="email" name="entry.516150706" required>
+        <input type="email" id="email" required>
       </div>
       <div class="form-group">
         <label>Idade *</label>
-        <input type="number" name="entry.2122933717" required>
+        <input type="number" required>
       </div>
       <div class="form-group">
         <label>NIF (opcional)</label>
-        <input type="text" name="entry.1867994373">
+        <input type="text">
       </div>
 
       <h3>Dados do Animal</h3>
       <div class="form-group">
         <label>Nome do animal *</label>
-        <input type="text" name="entry.508179888" required>
+        <input type="text" required>
       </div>
       <div class="form-group">
         <label>Tipo do animal *</label>
-        <select name="entry.1959898097" required>
+        <select required>
           <option value="">Selecione...</option>
           <option value="Cachorro">Cachorro</option>
           <option value="Gato">Gato</option>
@@ -53,7 +54,7 @@
       </div>
       <div class="form-group">
         <label>Classificação por porte *</label>
-        <select name="entry.1272333657" required>
+        <select required>
           <option value="">Selecione...</option>
           <option value="Pequeno porte">Pequeno porte</option>
           <option value="Médio porte">Médio porte</option>
@@ -62,18 +63,18 @@
       </div>
       <div class="form-group">
         <label>Raça</label>
-        <input type="text" name="entry.1180762189" placeholder="Sem Raça Definida..">
+        <input type="text" placeholder="Sem Raça Definida..">
       </div>
       <div class="form-group">
         <label>Idade do animal</label>
-        <input type="number" name="entry.1891450337">
+        <input type="number">
       </div>
       <div class="form-group">
         <label>Gênero</label>
-        <select name="entry.1662945019">
+        <select>
           <option value="">Selecione...</option>
           <option value="Macho">Macho</option>
-          <option value="Fêmea">Fêmea</option>
+          <option value="Femea">Fêmea</option>
         </select>
       </div>
 
@@ -82,29 +83,30 @@
         <label>Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *</label>
         <div class="health-options">
           <label>
-            <input type="radio" name="entry.1766077196" value="Sim" onclick="document.getElementById('details').style.display='block'" required> Sim
+            <input type="radio" value="Sim" onclick="document.getElementById('details').style.display='block'" required>
+            Sim
           </label>
           <label>
-            <input type="radio" name="entry.1766077196" value="Não" onclick="document.getElementById('details').style.display='none'"> Não
+            <input type="radio" value="Não" onclick="document.getElementById('details').style.display='none'"> Não
           </label>
         </div>
         <div id="details" style="display:none;">
-          <textarea name="entry.1584732498" placeholder="Especifique alergias, doenças, medicamentos ou cirurgias..."></textarea>
+          <textarea" placeholder="Especifique alergias, doenças, medicamentos ou cirurgias..."></textarea>
         </div>
       </div>
 
       <div class="form-group">
         <label>Data da consulta *</label>
-        <input type="date" name="entry.822851198_day" required>
+        <input type="date" required>
       </div>
       <div class="form-group">
         <label>Horário da consulta *</label>
-        <input type="time" name="entry.806939829_hour" required>
+        <input type="time" required>
       </div>
-<div class="form-actions">
-    <a href="/html/index.html" class="voltar">Voltar</a>
-  <button type="submit">Enviar Formulário</button>
-</div>
+      <div class="form-actions">
+        <a href="/html/index.html" class="voltar">Voltar</a>
+        <button type="submit">Enviar Formulário</button>
+      </div>
     </form>
   </div>
 
@@ -125,4 +127,5 @@
     }
   </script>
 </body>
+
 </html>
