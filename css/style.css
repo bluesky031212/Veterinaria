@@ -1,0 +1,76 @@
+    @font-face {
+      font-family: 'minecraft';
+      src: url(/fonts/MinecraftRegular-Bmg3.otf);
+    }* 
+
+{
+    box-sizing: border-box;
+    font-family: 'minecraft';
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f574;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-image: url(/images/background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .container {
+    background-color: rgba(255, 255, 255, 0.453);
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn {
+    padding: 10px;
+    background-image: url(/images/butao2.png);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-color: transparent;
+    min-width: 200px;
+    margin-top: 10px;
+  }
+
+  .btn:hover {
+    background-image: url(/images/butao1.png);
+  }
+
+  .link {
+    margin-top: 15px;
+    display: block;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+  }

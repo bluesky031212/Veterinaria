@@ -1,0 +1,171 @@
+    @font-face {
+      font-family: 'minecraft';
+      src: url(/fonts/MinecraftRegular-Bmg3.otf);
+    }
+    
+    body {
+      font-family:sans-serif;
+      margin: 0;
+      padding: 0;
+      background-size: cover;
+      background-position: center;
+      background-image: url(/images/background.png);
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-attachment: fixed;
+
+    }
+
+
+    header {
+      padding: 20px;
+      color: rgb(0, 0, 0);
+      background-image: url(/images/placa2.png);
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+    }
+    
+    header h1 {
+      margin-top: 50px;
+      font-size: 20px;
+      text-align: center;
+}
+
+    h3{
+      text-align: center;
+      margin-top: 0px;
+    }
+
+.formulario-container {
+    color: white;
+    background-color: #76767671;
+    border-radius: 10px;
+    border: black 3px solid;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra externa */
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+
+}
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    .form-actions {
+      text-align: center;
+    }
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.form-actions button,
+a.voltar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'minecraft';
+  padding: 10px 25px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background-image 0.3s ease-in-out;
+  height: 38px;
+  min-width: 100px;
+}
+.form-actions button:hover,
+a.voltar:hover {
+  background-image: url('/images/butao1.png');
+}
+
+.form-actions button {
+  background-image: url('/images/butao2.png');
+}
+
+a.voltar {
+  background-image: url('/images/butao2.png');
+}
+
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      background-color: #eee;
+      margin-top: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .health-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 5px;
+    }
+
+    .health-options label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+    }
+
+    #details textarea {
+      margin-top: px;
+    }

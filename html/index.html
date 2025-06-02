@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página de Cliente</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Já é cliente?</h2>
+        <input type="email" id="email" placeholder="seuemail@exemplo.com" required>
+        <input type="password" id="senha" placeholder="Digite sua senha" required>
+        <button class="btn" onclick="verificarLogin()">Entrar</button>
+        <div id="mensagemErro" class="error"></div>
+        <a href="/html/formulario.html" class="link">Não é cliente? Cadastre-se aqui</a>
+      </div>
+  <script>
+    function verificarLogin() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const erro = document.getElementById("mensagemErro");
+
+      // Exemplo fixo de email e senha válidos
+      const emailCorreto = "cliente@exemplo.com";
+      const senhaCorreta = "123456";
+
+      if (email === emailCorreto && senha === senhaCorreta) {
+        // Login correto - redireciona
+        window.location.href = "cliente.html";
+      } else {
+        // Login errado - mostra erro
+        erro.textContent = "E-mail ou senha incorretos.";
+      }
+    }
+  </script>
+</body>
+</html>
