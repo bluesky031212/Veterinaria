@@ -43,7 +43,7 @@
     background-color: #76767671;
     border-radius: 10px;
     border: black 3px solid;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra externa */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
