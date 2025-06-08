@@ -1,6 +1,6 @@
     @font-face {
       font-family: 'minecraft';
-      src: url(/fonts/MinecraftRegular-Bmg3.otf);
+      src: url(/Veterinaria/fonts/MinecraftRegular-Bmg3.otf);
     }
 
     body {
@@ -9,7 +9,7 @@
       padding: 0;
       background-size: cover;
       background-position: center;
-      background-image: url(/images/background.png);
+      background-image: url(/Veterinaria/images/background.png);
       background-repeat: no-repeat;
       background-size: 100%;
       background-attachment: fixed;
@@ -19,7 +19,7 @@
 
     header {
       padding: 30px;
-      background-image: url(/images/placa3.png);
+      background-image: url(/Veterinaria/images/placa3.png);
       background-color: transparent;
       background-repeat: no-repeat;
       background-position: center;
@@ -100,15 +100,15 @@
 
     .form-actions button:hover,
     a.voltar:hover {
-      background-image: url('/images/butao1.png');
+      background-image: url('/Veterinaria/images/butao1.png');
     }
 
     .form-actions button {
-      background-image: url('/images/butao2.png');
+      background-image: url('/Veterinaria/images/butao2.png');
     }
 
     a.voltar {
-      background-image: url('/images/butao2.png');
+      background-image: url('/Veterinaria/images/butao2.png');
     }
 
 

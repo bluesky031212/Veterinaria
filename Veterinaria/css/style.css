@@ -1,6 +1,6 @@
     @font-face {
       font-family: 'minecraft';
-      src: url(/fonts/MinecraftRegular-Bmg3.otf);
+      src: url(/Veterinaria/fonts/MinecraftRegular-Bmg3.otf);
     }* 
 
 {
@@ -17,7 +17,7 @@
     align-items: center;
     height: 100vh;
     font-family: Arial, sans-serif;
-    background-image: url(/images/background.png);
+    background-image: url(/Veterinaria/images/background.png);
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -46,7 +46,7 @@
 
   .btn {
     padding: 10px;
-    background-image: url(/images/butao2.png);
+    background-image: url(/Veterinaria/images/butao2.png);
     border: none;
     color: white;
     border-radius: 5px;
@@ -60,7 +60,7 @@
   }
 
   .btn:hover {
-    background-image: url(/images/butao1.png);
+    background-image: url(/Veterinaria/images/butao1.png);
   }
 
   .link {
