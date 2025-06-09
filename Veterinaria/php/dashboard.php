@@ -31,10 +31,10 @@ if ($tipo_animal === 'Cachorro')
 } 
 elseif ($tipo_animal === 'Gato') 
 {
-    $imagemfixa = '/Veterinaria/images/animal.png';
-    $imagemgif = '/Veterinaria/images/animal-pisca.gif';
+    $imagemfixa = '/Veterinaria/images/gato pisca.png';
+    $imagemgif = '/Veterinaria/images/gato-pisca.gif';
 } 
-elseif ($tipo_animal === 'Galinha') 
+elseif ($tipo_animal === 'Ave') 
 {
     $imagemfixa = '/Veterinaria/images/galinha pisca.png';
     $imagemgif = '/Veterinaria/images/galinha-pisca.gif';
@@ -98,7 +98,7 @@ else
     </div>
   </div>
 
-  <a class="back-button" href="/Veterinaria/html/index.html">BACK</a>
+  <a class="back-button" href="/Veterinaria/index.html">BACK</a>
 
   <footer>
     © 2025 ClínicaGubrielvin - Todos os direitos reservados.
