@@ -1,0 +1,12 @@
+body {
+    font-family: 'minecraft';
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    background-image: url(/Veterinaria/images/background.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-attachment: fixed;
+
+}

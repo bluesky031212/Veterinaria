@@ -1,14 +1,14 @@
 <?php
+ session_start(); // alterado
 include("conexao.php");
 
-// Coleta dos dados do formulário
 $nome = $_POST['nome'];
 $email = $_POST['email'];
-$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT); // criptografa senha
+$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
 
 $telefone = $_POST['telefone'];
 $idade = $_POST['idade'];
-$nif = $_POST['nif'] ?? null; // caso queira salvar, mas não tem no SQL
+$nif = $_POST['nif'] ?? null;
 
 $animal_nome = $_POST['animal_nome'];
 $tipo_animal = $_POST['tipo_animal'];
@@ -22,12 +22,10 @@ $detalhes_saude = $_POST['detalhes_saude'] ?? '';
 $data_consulta = $_POST['data'];
 $horario_consulta = $_POST['horario'];
 
-// Para saúde, juntamos os detalhes se o usuário respondeu "Sim"
 if ($saude === "Sim" && !empty($detalhes_saude)) {
     $saude = "Sim: " . $detalhes_saude;
 }
 
-// Verifica se o e-mail já está cadastrado
 $check = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
 $check->bind_param("s", $email);
 $check->execute();
@@ -38,15 +36,11 @@ if ($check->num_rows > 0) {
     exit();
 }
 
-// Cadastra o usuário
 $stmt_user = $conn->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)");
 $stmt_user->bind_param("sss", $nome, $email, $senha);
 $stmt_user->execute();
-
-// Pega o ID do novo usuário
 $usuario_id = $stmt_user->insert_id;
 
-// Cadastra o agendamento
 $stmt_agenda = $conn->prepare("INSERT INTO agendamentos 
     (usuario_id, nome_dono, telefone, email_contato, idade, nome_animal, tipo_animal, porte, raca, idade_animal, genero, saude, data_consulta, horario_consulta) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -72,10 +66,14 @@ $stmt_agenda->bind_param(
 $stmt_agenda->execute();
 
 if ($stmt_agenda->affected_rows > 0) {
-    echo "Cadastro e agendamento realizados com sucesso!";
-} else {
-    echo "Erro ao agendar.";
+    echo "<script>alert('Cadastro realizado com sucesso!');</script>";
+    // Redireciona após 3 segundos
+    header("refresh:3;url=/Veterinaria/index.html"); // Altere para a página que quiser
+    exit();
 }
+
 
 $conn->close();
 ?>
+
+
