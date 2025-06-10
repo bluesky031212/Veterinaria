@@ -29,6 +29,7 @@
     h3 {
       text-align: center;
       margin-top: 0px;
+      
     }
 
     .formulario-container {
@@ -164,3 +165,13 @@
     #details textarea {
       margin-top: px;
     }
+
+    .is-invalid
+    {
+    border-color: red; /* Muda a cor da borda para vermelho */
+    }
+
+  .is-invalid + .invalid-feedback 
+  {
+    color: red; /* Muda a cor do texto da mensagem de erro para vermelho */
+  }

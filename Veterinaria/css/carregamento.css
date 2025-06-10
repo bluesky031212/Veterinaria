@@ -1,12 +1,11 @@
+
 body {
     font-family: 'minecraft';
     margin: 0;
     padding: 0;
-    background-size: cover;
-    background-position: center;
-    background-image: url(/Veterinaria/images/background.png);
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-attachment: fixed;
+    background-color: rgb(255, 0, 255);
+    background-image: url(/Veterinaria/images/fundo-carregamento.png);
+    background-repeat: repeat;
+    background-size: 50px 50px;
 
 }

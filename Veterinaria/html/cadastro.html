@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clínica Pet Vida - Agendamento</title>
+  <link rel="stylesheet" href="/Veterinaria/css/formulario.css" />
+</head>
+<body>
+  <header>
+    <h1></h1>
+  </header>
+
+   
+
+    <div class="formulario-container">  
+
+         <!-- !Dados do dono -->
+
+    <h3>Dados do Dono</h3>
+    <form action="/Veterinaria/php/cadastro_animal.php" method="POST" id="form-animal">
+
+      <!-- *Nome do dono -->
+      <div class="form-group">
+          <label>Nome completo *</label>
+          <input type="text" name="nome" required onblur="validarNome(this)" />
+          <div class="invalid-feedback"></div>
+      </div>
+
+      <!-- JS Validação do nome do dono -->
+      <script>
+          function validarNome(input) {
+            if (!input.value) return;
+            input.value = input.value
+              .split(' ')
+              .filter(word => word.length > 0)
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+              .join(' ');
+
+            const regex = /^([A-ZÀ-Ÿ][a-zà-ÿ]*\s)+[A-ZÀ-Ÿ][a-zà-ÿ]*$/;
+
+            const feedback = input.nextElementSibling;
+
+            if (!regex.test(input.value)) {
+              feedback.textContent = 'Por favor, insira o nome completo válido.';
+              input.classList.add('is-invalid');
+            } else {
+              feedback.textContent = '';
+              input.classList.remove('is-invalid');
+            }
+          }
+      </script>
+
+
+      <!-- *Telefone do dono -->
+
+      <div class="form-group">
+        <label>Telefone *</label>
+        <input type="tel" name="telefone" required pattern="9[0-9]{8}" placeholder="Ex: 912345678"
+        oninput="this.value = this.value.slice(0,9)"/>
+        <div id="telefone-feedback" class="invalid-feedback"></div>
+      </div>
+
+      <!-- JS Validação de telefone do dono -->
+      
+      <script>     
+      const telefoneInput = document.querySelector('input[name="telefone"]');
+      const telefoneFeedback = document.getElementById('telefone-feedback');
+
+      // Adicione um ouvinte de evento para o evento "blur"
+      telefoneInput.addEventListener('blur', function() {
+          const telefone = telefoneInput.value.trim(); // Remove espaços em branco
+
+          // Verifique se o número de dígitos é exatamente 9
+          if (telefone.length !== 9 || !/^\d{9}$/.test(telefone) || !/^9\d{8}$/.test(telefone)) {
+              telefoneFeedback.textContent = 'Por favor, insira um número de telefone válido.';
+              telefoneInput.classList.add('is-invalid'); // Adiciona classe para estilizar o campo como inválido
+          } else {
+              telefoneFeedback.textContent = ''; // Remove a mensagem de erro
+              telefoneInput.classList.remove('is-invalid'); // Remove a classe de campo inválido
+          }
+      });
+      </script>
+
+      <!-- *E-mail do dono -->
+
+      <div class="form-group">
+        <label>E-mail *</label>
+        <input type="email" id="email" name="email" required maxlength="50" placeholder="Ex: nome@dominio.com"
+        oninput="this.value = this.value.slice(0, 50)" />
+        <small class="text-muted">Máximo de 50 caracteres</small>
+      </div>
+
+      <!-- *Senha de acesso -->
+
+      <div class="form-group">
+        <label>Senha *</label>
+        <input type="password" name="senha" required maxlength="30"
+               oninput="this.value = this.value.slice(0, 30)" />
+        <small class="text-muted">Máximo de 30 caracteres</small>
+      </div>
+
+      <!-- *Idade do dono -->
+
+      <div class="form-group">
+        <label>Idade *</label>
+        <input type="number" name="idade" id="idade" required min="18" max="120" class="form-control">
+        <div id="idade-feedback" class="invalid-feedback"></div>
+      </div>
+
+      <!-- JS Validação de idade do dono -->
+      <script>     
+
+                  const idadeInput = document.getElementById('idade');
+                  const idadeFeedback = document.getElementById('idade-feedback');
+
+
+                  idadeInput.addEventListener('blur', function() 
+                  {
+                  const idade = parseInt(idadeInput.value, 10);
+
+                  // Verifique se o valor é menor que 18
+                  if (idade < 18) {
+                      idadeFeedback.textContent = 'Dever ser maior de 18 anos para cadastrar-se.';
+                      idadeInput.classList.add('is-invalid');
+                      idadeInput.value = ''; 
+                  } 
+                  // Verifique se o valor é maior que 100
+                  else if (idade > 120) {
+                      idadeFeedback.textContent = 'A idade não pode ser maior que 120 anos.';
+                      idadeInput.classList.add('is-invalid'); 
+                      idadeInput.value = '';
+                  } else {
+                      idadeFeedback.textContent = '';
+                      idadeInput.classList.remove('is-invalid'); 
+                  }
+              });
+      </script>
+      
+      <!-- *NIF -->
+
+      <div class="form-group">
+        <label>NIF</label>
+        <input type="tel" name="nif" id="nif" maxlength="9" pattern="[0-9]{9}" />
+      </div>
+
+       <!-- !Dados do animal -->
+
+       <h3>Dados do Animal</h3>
+
+      <!-- *Nome do animal -->
+
+      <div class="form-group">
+            <label>Nome do animal *</label>
+            <input type="text" name="nome_animal" required maxlength="50" onblur="validarNome_animal(this)" />
+            <div class="invalid-feedback"></div>
+      </div>
+
+      <!-- JS Validação do nome do animal -->
+     <script>
+          function validarNome_animal(input) {
+            if (!input.value) return;
+            input.value = input.value
+              .split(' ')
+              .filter(word => word.length > 0)
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+              .join(' ');
+
+            const regex = /^([A-ZÀ-Ÿ][a-zà-ÿ]*\s?)*$/
+
+            const feedback = input.nextElementSibling;
+
+            if (!regex.test(input.value)) {
+              feedback.textContent = 'Por favor, insira o nome válido.';
+              input.classList.add('is-invalid');
+            } else {
+              feedback.textContent = '';
+              input.classList.remove('is-invalid');
+            }
+          }
+      </script>
+
+      <!-- *Tipo do animal -->
+
+      <div class="form-group">
+          <label>Tipo de animal *</label>
+          <select name="tipo_animal" id="tipo_animal" required class="form-control">
+              <option value="" disabled selected>Selecione o tipo</option>
+              <option value="Cachorro">Cachorro</option>
+              <option value="Gato">Gato</option>
+              <option value="Roedor">Roedor</option>
+              <option value="Ave">Ave</option>
+              <!-- Adicione mais opções conforme necessário -->
+          </select>
+      </div>
+
+      <!-- *Classificação por porte -->
+
+      <div class="form-group">
+        <label>Classificação por porte *</label>
+        <select name="porte_animal" required>
+          <option value="">Selecione...</option>
+          <option value="Pequeno porte">Pequeno porte</option>
+          <option value="Médio porte">Médio porte</option>
+          <option value="Grande porte">Grande porte</option>
+        </select>
+      </div>
+
+      <!-- *Raça do animal -->
+
+      <div class="form-group">
+        <label>Raça</label>
+        <input type="text" name="raca_animal" placeholder="Sem Raça Definida.."required oninput="validarRaca(this)" />
+          <div class="invalid-feedback"></div>
+      </div>
+      
+      <!-- JS Validação da Raça -->
+      <script>
+        function validarRaca(input) {
+            const regex = /^[A-Za-zÀ-ÿ\s]*$/; // Permite apenas letras e espaços
+            const feedback = input.nextElementSibling;
+
+            if (!regex.test(input.value)) {
+                feedback.textContent = 'Por favor, insira apenas letras e espaço.';
+                input.classList.add('is-invalid');
+            } else {
+                feedback.textContent = '';
+                input.classList.remove('is-invalid');
+            }
+        }
+      </script>
+
+      <!-- *Idade do animal -->
+
+     <div class="form-group">
+        <label>Idade do animal *</label>
+        <input type="number" name="idade_animal" id="idade_animal" required oninput="validarIdadeAnimal.this">
+        <div id="idade_animal-feedback" class="invalid-feedback"></div>
+      </div>
+
+      <!-- JS Validação de idade do animal -->
+        <script>
+          const idadeAnimalInput = document.getElementById('idade_animal');
+          const idadeAnimalFeedback = document.getElementById('idade_animal-feedback');
+          const tipoAnimalSelect = document.getElementById('tipo_animal');
+
+          function validarIdadeAnimal() {
+            const idadeAnimal = parseInt(idadeAnimalInput.value, 10);
+            const tipoAnimal = tipoAnimalSelect.value;
+
+            if (idadeAnimal < 0) {
+              idadeAnimalFeedback.textContent = 'Por favor, insira uma idade válida (número positivo).';
+              idadeAnimalInput.classList.add('is-invalid');
+            } else if (!tipoAnimal) {
+              idadeAnimalFeedback.textContent = 'Selecione o tipo de animal antes de inserir a idade.';
+              idadeAnimalInput.classList.add('is-invalid');
+            } else if (tipoAnimal === 'Roedor' && idadeAnimal > 12) {
+              idadeAnimalFeedback.textContent = 'A idade do roedor não pode ser maior que 12 anos.';
+              idadeAnimalInput.classList.add('is-invalid');
+            } else if (tipoAnimal !== 'Roedor' && idadeAnimal > 30) {
+              idadeAnimalFeedback.textContent = `A idade não pode ser maior que 30 anos para ${tipoAnimal.toLowerCase()}.`;
+              idadeAnimalInput.classList.add('is-invalid');
+            } else {
+              idadeAnimalFeedback.textContent = '';
+              idadeAnimalInput.classList.remove('is-invalid');
+            }
+          }
+
+          idadeAnimalInput.addEventListener('blur', validarIdadeAnimal);
+          tipoAnimalSelect.addEventListener('change', validarIdadeAnimal); // Atualiza a validação se o tipo for alterado
+        </script>
+
+      <!-- *Gênero do animal -->
+
+      <div class="form-group">
+        <label>Gênero</label>
+        <select name="genero_animal" required>
+          <option value="">Selecione...</option>
+          <option value="Macho">Macho</option>
+          <option value="Femea">Fêmea</option>
+        </select>
+      </div>
+
+      <h3>Saúde do Animal</h3>
+
+      <!-- *Informações de saúde do animal -->
+
+      <div class="form-group">
+        <label>Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *</label>
+        <div class="health-options">
+          <label>
+            <input type="radio" name="saude_animal" value="1" onclick="document.getElementById('details').style.display='block'" required />
+            Sim
+          </label>
+          <label>
+            <input type="radio" name="saude_animal" value="0" onclick="document.getElementById('details').style.display='none'" />
+            Não
+          </label>
+        </div>
+
+        <!-- *Detalhes de saúde (exibe somente se "Sim" for selecionado) -->
+
+        <div id="details" style="display:none;">
+          <textarea name="detalhes_saude" placeholder="Especifique alergias, doenças, medicamentos ou cirurgias..."></textarea>
+        </div>
+      </div>
+
+      <!-- *Botões de ação -->
+
+      <div class="form-actions">
+        <a href="/Veterinaria/index.html" class="voltar">Voltar</a>
+        <button type="submit" name="submit" id="submit">Enviar Formulário</button>
+      </div>
+
+    </form>
+  </div>
+
+  <iframe name="invisible" style="display: none;"></iframe>
+
+  <footer>
+    © 2025 ClínicaGubrielvin - Todos os direitos reservados.
+  </footer>
+
+  <script>
+      function validarFormulario(form) {
+          const camposInvalidos = form.querySelectorAll('.is-invalid');
+          return camposInvalidos.length === 0;
+      }
+
+      const form = document.getElementById('form-animal'); // Assumes your form has the ID "form-animal"
+
+      if (form) { // Check if the form element exists
+          form.addEventListener('submit', function(event) {
+              if (!validarFormulario(form)) {
+                  event.preventDefault(); // Prevents form submission
+                  alert('Por favor, corrija os erros no formulário antes de enviar.');
+              }
+          });
+      } else {
+          console.error("Formulário com ID 'form-animal' não encontrado.");
+      }
+    
+  </script>
+</body>
+</html>

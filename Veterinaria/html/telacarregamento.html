@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carregando</title>
+  <link rel="stylesheet" href="/Veterinaria/css/formulario.css">
+  <style>
+    body {
+      font-family: 'minecraft', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 50vh;
+      background-color: #111; /* fundo escuro opcional */
+      color: white;
+
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: 600px;
+      max-width: 90vw;
+    }
+    .carregar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50vh;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img src="/Veterinaria/images/logo.png" alt="Logo da Clínica Pet Vida" class="logo">
+  </div>
+  <div class="carregar">
+      <h1 id="loadingText">Carregando</h1>
+  </div>
+
+  <script>
+    // Animação "Carregando..."
+    const loadingText = document.getElementById("loadingText");
+    let dotCount = 0;
+
+    setInterval(() => {
+      dotCount = (dotCount + 1) % 4;
+      loadingText.textContent = "Carregando" + ".".repeat(dotCount);
+    }, 500);
+
+    // Redirecionar para o index após 3 segundos
+    setTimeout(() => {
+      window.location.href = "/Veterinaria/index.html";
+    }, 3000);
+  </script>
+</body>
+
+</html>

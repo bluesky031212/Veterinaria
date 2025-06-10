@@ -1,27 +1,31 @@
--- Tabela de usuários para login
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL
+    nome VARCHAR(100),
+    telefone VARCHAR(9),
+    nif VARCHAR(9) UNIQUE,
+    idade smallint(3),
+    email VARCHAR(100) UNIQUE,
+    senha VARCHAR(30)
 );
 
--- Tabela para marcações/consultas
+CREATE TABLE animais (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    nome_animal VARCHAR(100),
+    tipo_animal VARCHAR(50),
+    porte_animal VARCHAR(50),
+    raca_animal VARCHAR(50),
+    idade_animal smallint(2),
+    genero_animal VARCHAR(10),
+    saude_animal boolean,
+    saude_detalhe TEXT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 CREATE TABLE agendamentos (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  usuario_id INT NOT NULL,
-  nome_dono VARCHAR(100),
-  telefone VARCHAR(20),
-  email_contato VARCHAR(100),
-  idade INT,
-  nome_animal VARCHAR(100),
-  tipo_animal VARCHAR(50),
-  porte VARCHAR(50),
-  raca VARCHAR(100),
-  idade_animal INT,
-  genero VARCHAR(10),
-  saude TEXT,
-  data_consulta DATE,
-  horario_consulta TIME,
-  FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    animal_id INT,
+    data_consulta DATE,
+    horario_consulta TIME,
+    FOREIGN KEY (animal_id) REFERENCES animais(id) ON DELETE CASCADE
 );
