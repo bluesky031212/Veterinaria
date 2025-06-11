@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: /html/login.html");
+    header("Location: /Veterinaria/index.html");
     exit();
 }
 
@@ -10,7 +10,7 @@ include 'conexao.php';
 
 $usuarios_id = $_SESSION['usuario_id'];
 
-$sql = "SELECT u.nome, u.email, an.tipo, an.nome FROM usuarios u JOIN animais an ON u.id = an.usuario_id WHERE u.id = ?";
+$sql = "SELECT u.nome, u.email, an.tipo_animal, an.nome_animal FROM usuarios u JOIN animais an ON u.id = an.usuario_id WHERE u.id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuarios_id);
 $stmt->execute();
@@ -18,7 +18,7 @@ $result = $stmt->get_result();
 $usuarios = $result->fetch_assoc();
 $conn->close();
 
-$tipo = $usuarios['tipo'];
+$tipo = $usuarios['tipo_animal'];
 
 if ($tipo === 'Cachorro') {
     $imagemfixa = '/Veterinaria/images/CACHORRO PISCANDO.png';
@@ -29,6 +29,9 @@ if ($tipo === 'Cachorro') {
 } elseif ($tipo === 'Ave') {
     $imagemfixa = '/Veterinaria/images/galinha pisca.png';
     $imagemgif = '/Veterinaria/images/galinha-pisca.gif';
+} elseif ($tipo === 'Roedor') {
+    $imagemfixa = '/Veterinaria/images/hamster-pisca.png';
+    $imagemgif = '/Veterinaria/images/hamster-pisca.gif';
 } else {
     $imagemfixa = '/Veterinaria/images/default.png';
 }
@@ -43,11 +46,21 @@ if ($tipo === 'Cachorro') {
   <title>Página do Cliente</title>
   <link rel="stylesheet" href="/Veterinaria/css/area_cliente.css">
   <style>
+header {
+      font-family: 'minecraft';
+      background-color: transparent;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'minecraft';
       text-align: center;
       background-color: #f4f4f4;
-      padding: 20px;
+      grid-template-rows: 1fr auto;
+      min-height: 100vh;
+      margin: 0;
     }
 
     .img-animal img {
@@ -67,15 +80,19 @@ if ($tipo === 'Cachorro') {
       cursor: pointer;
     }
 
-    .back-button:hover, .agendar-button:hover {
-      background-color: #0056b3;
+      .formulario-container {
+      color: white;
+      background-color: #76767671;
+      border-radius: 10px;
+      border: black 3px solid;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
     }
 
-    footer {
-      margin-top: 50px;
-      text-align: center;
-      font-size: 14px;
-      color: #888;
+    .back-button:hover, .agendar-button:hover {
+      background-color: #0056b3;
     }
 
     .mensagem {
@@ -98,12 +115,12 @@ if ($tipo === 'Cachorro') {
       ?>
     </h1>
   </header>
-
+<div class="formulario-container">  
   <div class="img-animal">
-    <img id="animal" src="<?php echo $imagemfixa; ?>" alt="<?php echo $animais['tipo'] ?>">
+    <img id="animal" src="<?php echo $imagemfixa; ?>" alt="<?php echo $usuarios['tipo_animal'] ?>">
   </div>
 
-  <p class="mensagem">Deseja agendar uma nova marcação para <strong><?php echo htmlspecialchars($animais['nome']); ?></strong>?</p>
+  <p class="mensagem">Deseja agendar uma nova marcação para <strong><?php echo htmlspecialchars($usuarios['nome_animal']); ?></strong>?</p>
 
   <!-- Botão para mostrar/esconder o calendário -->
   <button id="agendar-btn" class="agendar-button">Agendar Consulta</button>
@@ -116,12 +133,9 @@ if ($tipo === 'Cachorro') {
     <br><br>
     <button>Confirmar Agendamento</button>
   </div>
-
+<a class="back-button" href="/Veterinaria/php/cadastraranimal.php">ANIMAL</a>
   <a class="back-button" href="/Veterinaria/index.html">Voltar ao Início</a>
-
-  <footer>
-    © 2025 ClínicaGubrielvin - Todos os direitos reservados.
-  </footer>
+  </div>
 
   <script>
     const animal = document.getElementById("animal");
@@ -139,5 +153,6 @@ if ($tipo === 'Cachorro') {
     });
   </script>
 </body>
+
 
 </html>

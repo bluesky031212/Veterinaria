@@ -5,7 +5,7 @@ CREATE TABLE usuarios (
     nif VARCHAR(9) UNIQUE,
     idade smallint(3),
     email VARCHAR(100) UNIQUE,
-    senha VARCHAR(30)
+    senha VARCHAR(255)
 );
 
 CREATE TABLE animais (
