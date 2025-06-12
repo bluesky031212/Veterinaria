@@ -19,11 +19,11 @@
 
     header {
       padding: 30px;
-      background-image: url(/Veterinaria/images/placa3.png);
+      background-image: url(/Veterinaria/images/cherry_leaves.png);
       background-color: transparent;
-      background-repeat: no-repeat;
+      background-repeat: repeat;
       background-position: center;
-      background-size: contain; 
+      background-size: 30px;
     }
 
     h3 {
@@ -120,6 +120,7 @@
       background-color: #76767671;
       margin-top: 40px;
       border:rgba(0, 0, 0, 0.5) 2px solid;
+      color: white;
     }
 
     .form-group {

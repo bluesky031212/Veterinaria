@@ -7,152 +7,225 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 include 'conexao.php';
+$usuario_id = $_SESSION['usuario_id'];
 
-$usuarios_id = $_SESSION['usuario_id'];
-
-$sql = "SELECT u.nome, u.email, an.tipo_animal, an.nome_animal FROM usuarios u JOIN animais an ON u.id = an.usuario_id WHERE u.id = ?";
+$sql = "SELECT * FROM animais WHERE usuario_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $usuarios_id);
+$stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $result = $stmt->get_result();
-$usuarios = $result->fetch_assoc();
+$animais = $result->fetch_all(MYSQLI_ASSOC);
 $conn->close();
 
-$tipo = $usuarios['tipo_animal'];
-
-if ($tipo === 'Cachorro') {
-    $imagemfixa = '/Veterinaria/images/CACHORRO PISCANDO.png';
-    $imagemgif = '/Veterinaria/images/CACHORRO-PISCANDO.gif';
-} elseif ($tipo === 'Gato') {
-    $imagemfixa = '/Veterinaria/images/gato pisca.png';
-    $imagemgif = '/Veterinaria/images/gato-pisca.gif';
-} elseif ($tipo === 'Ave') {
-    $imagemfixa = '/Veterinaria/images/galinha pisca.png';
-    $imagemgif = '/Veterinaria/images/galinha-pisca.gif';
-} elseif ($tipo === 'Roedor') {
-    $imagemfixa = '/Veterinaria/images/hamster-pisca.png';
-    $imagemgif = '/Veterinaria/images/hamster-pisca.gif';
-} else {
-    $imagemfixa = '/Veterinaria/images/default.png';
+function getImagensAnimal($tipo) {
+    switch ($tipo) {
+        case 'Cachorro':
+            return [
+                'fixo' => '/Veterinaria/images/CACHORRO PISCANDO.png',
+                'gif' => '/Veterinaria/images/CACHORRO-PISCANDO.gif',
+                'som' => '/Veterinaria/som/cachorro.mp3'
+            ];
+        case 'Gato':
+            return [
+                'fixo' => '/Veterinaria/images/gato pisca.png',
+                'gif' => '/Veterinaria/images/gato-pisca.gif',
+                'som' => '/Veterinaria/som/gato.mp3'
+            ];
+        case 'Ave':
+            return [
+                'fixo' => '/Veterinaria/images/galinha pisca.png',
+                'gif' => '/Veterinaria/images/galinha-pisca.gif',
+                'som' => '/Veterinaria/som/galinha.mp3'
+            ];
+        case 'Roedor':
+            return [
+                'fixo' => '/Veterinaria/images/hamster-pisca.png',
+                'gif' => '/Veterinaria/images/hamster-pisca.gif',
+                'som' => '/Veterinaria/som/hamster.mp3'
+            ];
+        default:
+            return [
+                'fixo' => '/Veterinaria/images/default.png',
+                'gif' => '/Veterinaria/images/default.png',
+                'som' => ''
+            ];
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Página do Cliente</title>
-  <link rel="stylesheet" href="/Veterinaria/css/area_cliente.css">
-  <style>
-header {
-      font-family: 'minecraft';
-      background-color: transparent;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <title>Área do Cliente</title>
+    <link rel="stylesheet" href="/Veterinaria/css/area_cliente.css">
+    <style>
+        body {
+            font-family: 'minecraft';
+            background-color: #f4f4f4;
+            margin: 0;
+            text-align: center;
+        }
 
-    body {
-      font-family: 'minecraft';
-      text-align: center;
-      background-color: #f4f4f4;
-      grid-template-rows: 1fr auto;
-      min-height: 100vh;
-      margin: 0;
-    }
+        header {
+            background-color: transparent;
+            color: white;
+            padding: 20px;
+        }
 
-    .img-animal img {
-      width: 120px;
-      cursor: pointer;
-      margin: 20px 0;
-    }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: #76767671;
+            border-radius: 10px;
+            border: black 3px solid;
+            padding: 20px;
+        }
 
-    .back-button, .agendar-button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      margin: 10px;
-      cursor: pointer;
-    }
+        .animais-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
 
-      .formulario-container {
-      color: white;
-      background-color: #76767671;
-      border-radius: 10px;
-      border: black 3px solid;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-    }
+        .animal-card {
+            text-align: center;
+        }
 
-    .back-button:hover, .agendar-button:hover {
-      background-color: #0056b3;
-    }
+        .animal-card img {
+            width: 120px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
 
-    .mensagem {
-      font-size: 18px;
-      margin-top: 10px;
-    }
+        .animal-card img:hover {
+            border: 2px solid #007BFF;
+        }
 
-    #calendario-container {
-      margin-top: 20px;
-    }
-  </style>
+        p {
+            color: white;
+        }
+
+      .mensagem {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 40px auto; /* centraliza horizontalmente */
+        padding: 20px;
+        color: white;
+        width: 50%;
+        background-color: rgba(255, 251, 251, 0.31);
+        border: 1px solid black;
+        border-radius: 10%;
+}
+
+
+        #calendario-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .back-button, .agendar-button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .back-button:hover, .agendar-button:hover {
+            background-color: #0056b3;
+        }
+
+        .animal-nome {
+            font-weight: bold;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
-  <header>
-    <h1>Bem-vindo, 
-      <?php 
-        $partes = explode(" ", trim($usuarios['nome']));
-        echo htmlspecialchars($partes[0] . " " . end($partes)); 
-      ?>
-    </h1>
-  </header>
-<div class="formulario-container">  
-  <div class="img-animal">
-    <img id="animal" src="<?php echo $imagemfixa; ?>" alt="<?php echo $usuarios['tipo_animal'] ?>">
-  </div>
+<header>
+    <h1>Bem-vindo(a)!</h1>
+</header>
 
-  <p class="mensagem">Deseja agendar uma nova marcação para <strong><?php echo htmlspecialchars($usuarios['nome_animal']); ?></strong>?</p>
+<div class="container">
+    <div class="animais-container">
+        <?php foreach ($animais as $animal):
+            $imgs = getImagensAnimal($animal['tipo_animal']);
+        ?>
+            <div class="animal-card">
+                <img 
+                    src="<?= $imgs['fixo'] ?>" 
+                    data-fixo="<?= $imgs['fixo'] ?>" 
+                    data-gif="<?= $imgs['gif'] ?>" 
+                    data-som="<?= $imgs['som'] ?>" 
+                    data-nome="<?= htmlspecialchars($animal['nome_animal']) ?>" 
+                    data-id="<?= $animal['id'] ?>"
+                >
+                <div class="animal-nome"><?= htmlspecialchars($animal['nome_animal']) ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-  <!-- Botão para mostrar/esconder o calendário -->
-  <button id="agendar-btn" class="agendar-button">Agendar Consulta</button>
+    <p class="mensagem" id="mensagem">Selecione um animal para agendar.</p>
 
-  <!-- Calendário oculto -->
-  <div id="calendario-container" style="display: none;">
-    <h2>Agenda aqui</h2>
-    <h3>Escolha uma data:</h3>
-    <input type="date" name="data-consulta">
-    <br><br>
-    <button>Confirmar Agendamento</button>
-  </div>
-<a class="back-button" href="/Veterinaria/php/cadastraranimal.php">ANIMAL</a>
-  <a class="back-button" href="/Veterinaria/index.html">Voltar ao Início</a>
-  </div>
+    <div id="calendario-container">
+        <form action="agendar_consulta.php" method="POST">
+            <input type="hidden" name="animal_id" id="animal_id">
+            <h3>Escolha a data:</h3>
+            <input type="date" name="data_consulta" required>
+            <h3>Escolha o horário:</h3>
+            <input type="time" name="hora_consulta" required>
+            <br><br>
+            <button type="submit" class="agendar-button">Confirmar Agendamento</button>
+        </form>
+    </div>
 
-  <script>
-    const animal = document.getElementById("animal");
-    animal.addEventListener("mouseenter", () => {
-      animal.src = "<?php echo $imagemgif; ?>?t=" + Date.now();
+    <a class="back-button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
+    <a class="back-button" href="/Veterinaria/index.html">Voltar ao Início</a>
+</div>
+
+<!-- Áudio para som de hover -->
+<audio id="som-hover"></audio>
+
+<script>
+    const animais = document.querySelectorAll('.animal-card img');
+    const mensagem = document.getElementById("mensagem");
+    const calendario = document.getElementById("calendario-container");
+    const inputAnimalId = document.getElementById("animal_id");
+    const som = document.getElementById("som-hover");
+
+    animais.forEach(img => {
+        img.addEventListener("mouseenter", () => {
+            img.src = img.dataset.gif + "?t=" + Date.now();
+            const somAnimal = img.dataset.som;
+            if (somAnimal) {
+                som.src = somAnimal;
+                som.currentTime = 0;
+                som.play();
+            }
+        });
+
+        img.addEventListener("mouseleave", () => {
+            img.src = img.dataset.fixo;
+            som.pause();
+            som.currentTime = 0;
+        });
+
+        img.addEventListener("click", () => {
+            const nome = img.dataset.nome;
+            const id = img.dataset.id;
+            mensagem.textContent = `Deseja agendar uma nova marcação para ${nome}?`;
+            inputAnimalId.value = id;
+            calendario.style.display = "block";
+        });
     });
-    animal.addEventListener("mouseleave", () => {
-      animal.src = "<?php echo $imagemfixa; ?>";
-    });
-
-    // Mostrar/esconder o calendário ao clicar no botão
-    document.getElementById("agendar-btn").addEventListener("click", function() {
-      const calendario = document.getElementById("calendario-container");
-      calendario.style.display = calendario.style.display === "none" ? "block" : "none";
-    });
-  </script>
+</script>
 </body>
-
-
 </html>
