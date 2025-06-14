@@ -260,7 +260,7 @@ $conn->close();
       <!-- *Botões de ação -->
 
       <div class="form-actions">
-        <a href="/Veterinaria/index.html" class="voltar">Voltar</a>
+        <a href="/Veterinaria/php/dashboard.php" class="voltar">Voltar</a>
         <button type="submit" name="submit" id="submit">Enviar Formulário</button>
       </div>
 
