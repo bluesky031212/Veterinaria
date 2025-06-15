@@ -6,7 +6,8 @@ CREATE TABLE usuarios (
     nif VARCHAR(9) UNIQUE,
     idade SMALLINT UNSIGNED CHECK (idade BETWEEN 0 AND 150),
     email VARCHAR(100) UNIQUE,
-    senha VARCHAR(255)
+    senha VARCHAR(255),
+    aceitou_politica BOOLEAN DEFAULT FALSE
 );
 
 -- Tabela de animais, relacionando com usuários
@@ -24,13 +25,26 @@ CREATE TABLE animais (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Tabela de consultas (agendamentos), relacionando com animais e usuários
+
+CREATE TABLE veterinarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    telefone VARCHAR(9),
+    email VARCHAR(100) UNIQUE,
+    senha VARCHAR(255)
+);
+
+
 CREATE TABLE consultas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT,
     animal_id INT,
     data_consulta DATE,
     hora_consulta TIME,
+    veterinario_id INT, 
+    descricao_consulta TEXT,
+    status_consulta ENUM('agendada', 'realizada', 'cancelada') DEFAULT 'agendada',
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (animal_id) REFERENCES animais(id) ON DELETE CASCADE
+    FOREIGN KEY (animal_id) REFERENCES animais(id) ON DELETE CASCADE,
+    FOREIGN KEY (veterinario_id) REFERENCES veterinarios(id) ON DELETE CASCADE  -- Referência correta ao id
 );

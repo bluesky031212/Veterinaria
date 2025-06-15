@@ -8,7 +8,7 @@
 </head>
 <body>
   <header>
-    <h1></h1>
+    Cadastra-se já na clínica KGB!
   </header>
 
    
@@ -18,7 +18,7 @@
          <!-- !Dados do dono -->
 
     <h3>Dados do Dono</h3>
-    <form action="/Veterinaria/php/cadastro_animal.php" method="POST" id="form-animal">
+    <form action="/Veterinaria/php/cadastro_usuario.php" method="POST" id="form-animal">
 
       <!-- *Nome do dono -->
       <div class="form-group">
@@ -141,7 +141,7 @@
 
       <div class="form-group">
         <label>NIF</label>
-        <input type="tel" name="nif" id="nif" maxlength="9" pattern="[0-9]{9}" />
+        <input type="tel" name="nif" id="nif" required maxlength="9" pattern="[0-9]{9}" />
       </div>
 
        <!-- !Dados do animal -->
@@ -305,6 +305,34 @@
         </div>
       </div>
 
+      <!-- *Politica de privacidade-->
+<div class="form-group">
+  <label class="politica-label">
+    <input type="checkbox" name="politica_privacidade" required />
+    <span>
+      Eu li e concordo com a 
+      <a href="/Veterinaria/html/politica_privacidade.html" target="_blank">Política de Privacidade</a> da Clínica KGB.
+    </span>
+  </label>
+</div>
+      <!-- CSS para o checkbox e label -->
+<style>
+.politica-label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: white;
+}
+
+.politica-label input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  position: relative;
+  top: 0;
+}
+ </style>
       <!-- *Botões de ação -->
 
       <div class="form-actions">
@@ -318,7 +346,7 @@
   <iframe name="invisible" style="display: none;"></iframe>
 
   <footer>
-    © 2025 ClínicaGubrielvin - Todos os direitos reservados.
+    © 2025 Clínica KGB - Todos os direitos reservados.
   </footer>
 
   <script>

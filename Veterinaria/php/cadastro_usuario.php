@@ -1,5 +1,5 @@
 <?php
- session_start(); // alterado
+session_start(); // alterado
 include("conexao.php");
 
 $nome = $_POST['nome'];
@@ -9,6 +9,7 @@ $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
 $telefone = $_POST['telefone'];
 $idade = $_POST['idade'];
 $nif = $_POST['nif'] ?? null;
+$aceitou_politica = $_POST['politica'] ?? null;
 
 $nome_animal = $_POST['nome_animal'];
 $tipo_animal = $_POST['tipo_animal'];
@@ -17,12 +18,9 @@ $raca_animal = $_POST['raca_animal'] ?? null;
 $idade_animal = $_POST['idade_animal'] ?? null;
 $genero_animal = $_POST['genero_animal'] ?? null;
 $saude_animal = $_POST['saude_animal'] ?? 'Não informado';
-$saude_detalhe = $_POST['sdetalhes_saude'] ?? '';
+$saude_detalhe = $_POST['sdetalhes_saude'] ?? '';  // Corrigido para $saude_detalhe
 
-
-$email = $_POST['email']; // ou de onde você pegar o dado
-
-// Prepare a query para verificar
+// Verifica se o email já está cadastrado
 $stmt_check = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
 $stmt_check->bind_param("s", $email);
 $stmt_check->execute();
@@ -34,34 +32,19 @@ if ($stmt_check->num_rows > 0) {
     exit();
 }
 
-
-
-
-if ($saude_animal === "1" && !empty($detalhes_saude)) {
-    $saude_animal = "1: " . $detalhes_saude;
+// Se a saúde do animal for informada como "1", inclui os detalhes de saúde
+if ($saude_animal === "1" && !empty($saude_detalhe)) {
+    $saude_animal = "1: " . $saude_detalhe;
 }
 
-$check = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
-$check->bind_param("s", $email);
-$check->execute();
-$check->store_result();
-
-if ($check->num_rows > 0) {
-    echo "<script>
-        alert('Email já cadastrado. Por favor, faça login ou use outro email.');
-    </script>";
-    exit();
-}
-
-$stmt_user = $conn->prepare("INSERT INTO usuarios (nome, email, senha, telefone, nif, idade) VALUES (?, ?, ?, ?, ?, ?)");
-$stmt_user->bind_param("ssssss", $nome, $email, $senha, $telefone, $nif, $idade);
+// Insere o usuário na tabela de usuários
+$stmt_user = $conn->prepare("INSERT INTO usuarios (nome, email, senha, telefone, nif, idade, aceitou_politica) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt_user->bind_param("sssssis", $nome, $email, $senha, $telefone, $nif, $idade, $aceitou_politica);
 $stmt_user->execute();
-$usuario_id = $stmt_user->insert_id;
+$usuario_id = $stmt_user->insert_id; // ID do usuário recém inserido
 
-
-// Depois insere o animal com o ID do usuário
-$stmt_animal = $conn->prepare("INSERT INTO animais 
-    (usuario_id, nome_animal, tipo_animal, porte_animal, raca_animal, idade_animal, genero_animal,saude_animal, saude_detalhe) 
+// Agora insere o animal com o ID do usuário
+$stmt_animal = $conn->prepare("INSERT INTO animais (usuario_id, nome_animal, tipo_animal, porte_animal, raca_animal, idade_animal, genero_animal, saude_animal, saude_detalhe) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $stmt_animal->bind_param(
@@ -74,21 +57,23 @@ $stmt_animal->bind_param(
     $idade_animal,
     $genero_animal,
     $saude_animal,
-    $saude_detalhe);
+    $saude_detalhe
+);
 
 $stmt_animal->execute();
 
-if ($stmt_user->affected_rows > 0 && $stmt_animal->affected_rows > 0) {	
+// Verifica se a inserção foi bem-sucedida
+if ($stmt_user->affected_rows > 0 && $stmt_animal->affected_rows > 0) {
     echo "<script>
         alert('Cadastro realizado com sucesso!');
         window.location.href = '/Veterinaria/php/telacarregamento.php';
     </script>";
     exit();
+} else {
+    echo "<script>alert('Ocorreu um erro durante o cadastro. Tente novamente mais tarde.'); window.history.back();</script>";
+    exit();
 }
 
-
-
+// Fecha a conexão
 $conn->close();
 ?>
-
-

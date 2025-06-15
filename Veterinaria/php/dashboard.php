@@ -51,25 +51,51 @@ function getImagensAnimal($tipo) {
             ];
     }
 }
+
+$dataAtual = date('Y-m-d');
+
+function gerarOpcoesHorario($inicio = '10:00', $fim = '17:00', $intervaloMinutos = 30) {
+    $times = [];
+    $inicioTimestamp = strtotime($inicio);
+    $fimTimestamp = strtotime($fim);
+
+    for ($time = $inicioTimestamp; $time <= $fimTimestamp; $time += $intervaloMinutos * 60) {
+        $times[] = date('H:i', $time);
+    }
+
+    return $times;
+}
+
+$opcoesHorario = gerarOpcoesHorario();
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Área do Cliente</title>
-    <link rel="stylesheet" href="/Veterinaria/css/area_cliente.css">
     <style>
-        body {
+        @font-face {
             font-family: 'minecraft';
-            background-color: #f4f4f4;
+            src: url('/Veterinaria/fontes/Minecraft.ttf') format('truetype');
+        }
+
+        body {
+            font-family: sans-serif;
             margin: 0;
-            text-align: center;
+            padding: 0;
+            background-image: url(/Veterinaria/images/background.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         header {
+            padding: 30px;
             background-color: transparent;
-            color: white;
-            padding: 20px;
+            background-position: center;
+            background-size: contain;
+            text-align: center;
         }
 
         .container {
@@ -79,6 +105,7 @@ function getImagensAnimal($tipo) {
             border-radius: 10px;
             border: black 3px solid;
             padding: 20px;
+            text-align: center;
         }
 
         .animais-container {
@@ -103,53 +130,135 @@ function getImagensAnimal($tipo) {
             border: 2px solid #007BFF;
         }
 
-        p {
+        .animal-nome {
+            font-weight: bold;
             color: white;
         }
 
-      .mensagem {
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        margin: 40px auto; /* centraliza horizontalmente */
-        padding: 20px;
-        color: white;
-        width: 50%;
-        background-color: rgba(255, 251, 251, 0.31);
-        border: 1px solid black;
-        border-radius: 10%;
-}
-
+        .mensagem {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 40px auto;
+            padding: 20px;
+            color: white;
+            width: 50%;
+            background-color: rgba(255, 251, 251, 0.31);
+            border: 1px solid black;
+            border-radius: 10%;
+        }
 
         #calendario-container {
             display: none;
             margin-top: 20px;
         }
 
-        .back-button, .agendar-button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
+        #calendario-container form {
+    text-align: center;
+    }   
+
+        input[type="date"],
+        input[type="time"] {
+            padding: 8px;
             border-radius: 5px;
-            margin: 10px;
-            cursor: pointer;
+            border: 1px solid #ccc;
         }
 
-        .back-button:hover, .agendar-button:hover {
-            background-color: #0056b3;
+        .botoes-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
         }
 
-        .animal-nome {
-            font-weight: bold;
+        .agendar-button {
+    display: inline-block;
+            font-family: 'minecraft', sans-serif;
+    padding: 0 25px;
+    background-color: transparent;
+    background-image: url('/Veterinaria/images/butao2.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+    height: 48px;
+    min-width: 160px;
+    line-height: 48px;
+    border: none;
+    box-sizing: border-box;
+}
+
+        .button,
+        .excluir-button {
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
             color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 38px;
+            min-width: 140px;
+            line-height: 38px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+input[type="date"],
+select[name="hora_consulta"] {
+  width: 240px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+        .button:hover,
+        .agendar-button:hover,
+        .excluir-button:hover {
+            background-image: url('/Veterinaria/images/butao1.png');
+            transform: scale(1.05);
+        }
+
+        /* Aqui vem a correção para centralizar o botão Confirmar Agendamento */
+        #calendario-container form {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 5px;
+            font-size: 10px;
+            background-color: #76767671;
+            margin-top: 40px;
+            border: rgba(0, 0, 0, 0.5) 2px solid;
+        }
+
+        form {
+            margin: 0;
         }
     </style>
 </head>
 
 <body>
+
 <header>
     <h1>Bem-vindo(a)!</h1>
 </header>
@@ -179,19 +288,28 @@ function getImagensAnimal($tipo) {
         <form action="agendar_consulta.php" method="POST">
             <input type="hidden" name="animal_id" id="animal_id">
             <h3>Escolha a data:</h3>
-            <input type="date" name="data_consulta" required>
+            <input type="date" name="data_consulta" required min="<?= $dataAtual ?>">
             <h3>Escolha o horário:</h3>
-            <input type="time" name="hora_consulta" required>
+<select name="hora_consulta" required>
+    <option value="" disabled selected>Selecione um horário</option>
+    <?php foreach ($opcoesHorario as $hora): ?>
+        <option value="<?= $hora ?>"><?= $hora ?></option>
+    <?php endforeach; ?>
+</select>
             <br><br>
             <button type="submit" class="agendar-button">Confirmar Agendamento</button>
         </form>
     </div>
 
-    <a class="back-button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
-    <a class="back-button" href="/Veterinaria/index.html">Voltar ao Início</a>
+    <div class="botoes-container">
+        <a class="button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
+        <a class="button" href="/Veterinaria/index.html">Voltar ao Início</a>
+        <form action="excluir_conta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta?');">
+            <button type="submit" class="excluir-button">Excluir Conta</button>
+        </form>
+    </div>
 </div>
 
-<!-- Áudio para som de hover -->
 <audio id="som-hover"></audio>
 
 <script>
@@ -226,6 +344,20 @@ function getImagensAnimal($tipo) {
             calendario.style.display = "block";
         });
     });
+
+    // Verifica se é domingo e alerta o usuário
+  const inputData = document.querySelector('input[name="data_consulta"]');
+
+  inputData.addEventListener('change', function() {
+    const dataSelecionada = new Date(this.value + 'T00:00:00'); // garante que pegue o dia correto
+
+    if (dataSelecionada.getDay() === 0) { // domingo = 0
+      alert('Domingos não são permitidos para agendamento.');
+      this.value = ''; // limpa o campo para forçar nova escolha
+    }
+  });
+
 </script>
+
 </body>
 </html>
