@@ -194,23 +194,12 @@
           </select>
       </div>
 
-      <!-- *Classificação por porte -->
-
-      <div class="form-group">
-        <label>Classificação por porte *</label>
-        <select name="porte_animal" required>
-          <option value="">Selecione...</option>
-          <option value="Pequeno porte">Pequeno porte</option>
-          <option value="Médio porte">Médio porte</option>
-          <option value="Grande porte">Grande porte</option>
-        </select>
-      </div>
 
       <!-- *Raça do animal -->
 
       <div class="form-group">
         <label>Raça</label>
-        <input type="text" name="raca_animal" placeholder="Sem Raça Definida.."required oninput="validarRaca(this)" />
+        <input type="text" name="raca_animal" placeholder="Sem Raça Definida/ Não sei..." oninput="validarRaca(this)" />
           <div class="invalid-feedback"></div>
       </div>
       
@@ -281,10 +270,11 @@
         </select>
       </div>
 
-      <h3>Saúde do Animal</h3>
+
 
       <!-- *Informações de saúde do animal -->
 
+      
       <div class="form-group">
         <label>Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *</label>
         <div class="health-options">
@@ -306,33 +296,34 @@
       </div>
 
       <!-- *Politica de privacidade-->
-<div class="form-group">
-  <label class="politica-label">
-    <input type="checkbox" name="politica_privacidade" required />
-    <span>
-      Eu li e concordo com a 
-      <a href="/Veterinaria/html/politica_privacidade.html" target="_blank">Política de Privacidade</a> da Clínica KGB.
-    </span>
-  </label>
-</div>
+      <div class="form-group">
+        <label class="politica-label">
+          <input type="checkbox" name="politica_privacidade" required />
+          <span>
+            Eu li e concordo com a 
+            <a href="/Veterinaria/html/politica_privacidade.html" target="_blank">Política de Privacidade</a> da Clínica KGB.
+          </span>
+        </label>
+      </div>
       <!-- CSS para o checkbox e label -->
-<style>
-.politica-label {
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: white;
-}
+        <style>
+        .politica-label {
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          color: white;
+        }
 
-.politica-label input[type="checkbox"] {
-  margin-right: 8px;
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  position: relative;
-  top: 0;
-}
- </style>
+        .politica-label input[type="checkbox"] {
+          margin-right: 8px;
+          width: 16px;
+          height: 16px;
+          vertical-align: middle;
+          position: relative;
+          top: 0;
+        }
+        </style>
+        
       <!-- *Botões de ação -->
 
       <div class="form-actions">

@@ -1,5 +1,8 @@
-
-
+<?php if (!empty($msgErro)) : ?>
+    <div class="erro-login" style="color: red; margin-bottom: 15px;">
+        <?php echo htmlspecialchars($msgErro); ?>
+    </div>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,6 +13,7 @@
   <link rel="stylesheet" href="/Veterinaria/css/style.css">
 </head>
 <body>
+  
   <div class="container">
     <h2>Já é cliente?</h2>
     

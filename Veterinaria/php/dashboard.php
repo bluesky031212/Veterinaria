@@ -9,12 +9,24 @@ if (!isset($_SESSION['usuario_id'])) {
 include 'conexao.php';
 $usuario_id = $_SESSION['usuario_id'];
 
+// Pegar animais do usuário
 $sql = "SELECT * FROM animais WHERE usuario_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $animais = $result->fetch_all(MYSQLI_ASSOC);
+
+// Pegar veterinários
+$sqlVet = "SELECT id, nome FROM veterinarios";
+$resultVet = $conn->query($sqlVet);
+$veterinarios = [];
+if ($resultVet) {
+    while ($row = $resultVet->fetch_assoc()) {
+        $veterinarios[] = $row;
+    }
+}
+
 $conn->close();
 
 function getImagensAnimal($tipo) {
@@ -69,6 +81,7 @@ function gerarOpcoesHorario($inicio = '10:00', $fim = '17:00', $intervaloMinutos
 $opcoesHorario = gerarOpcoesHorario();
 
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -156,14 +169,20 @@ $opcoesHorario = gerarOpcoesHorario();
         }
 
         #calendario-container form {
-    text-align: center;
-    }   
+            text-align: center;
+        }   
 
         input[type="date"],
-        input[type="time"] {
+        input[type="time"],
+        select[name="hora_consulta"],
+        select[name="veterinario_id"] {
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+            width: 240px;
+            margin-bottom: 15px;
         }
 
         .botoes-container {
@@ -176,24 +195,24 @@ $opcoesHorario = gerarOpcoesHorario();
         }
 
         .agendar-button {
-    display: inline-block;
+            display: inline-block;
             font-family: 'minecraft', sans-serif;
-    padding: 0 25px;
-    background-color: transparent;
-    background-image: url('/Veterinaria/images/butao2.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    color: white;
-    cursor: pointer;
-    font-size: 13px;
-    text-decoration: none;
-    height: 48px;
-    min-width: 160px;
-    line-height: 48px;
-    border: none;
-    box-sizing: border-box;
-}
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            height: 48px;
+            min-width: 160px;
+            line-height: 48px;
+            border: none;
+            box-sizing: border-box;
+        }
 
         .button,
         .excluir-button {
@@ -220,15 +239,10 @@ $opcoesHorario = gerarOpcoesHorario();
             box-sizing: border-box;
         }
 
-input[type="date"],
-select[name="hora_consulta"] {
-  width: 240px;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  box-sizing: border-box;
-}
+        input[type="date"]:invalid,
+        select:invalid {
+            border-color: red;
+        }
 
         .button:hover,
         .agendar-button:hover,
@@ -237,10 +251,6 @@ select[name="hora_consulta"] {
             transform: scale(1.05);
         }
 
-        /* Aqui vem a correção para centralizar o botão Confirmar Agendamento */
-        #calendario-container form {
-            text-align: center;
-        }
 
         footer {
             text-align: center;
@@ -250,10 +260,7 @@ select[name="hora_consulta"] {
             margin-top: 40px;
             border: rgba(0, 0, 0, 0.5) 2px solid;
         }
-
-        form {
-            margin: 0;
-        }
+        
     </style>
 </head>
 
@@ -264,6 +271,19 @@ select[name="hora_consulta"] {
 </header>
 
 <div class="container">
+
+    <?php
+    if (isset($_SESSION['erro'])) {
+        echo "<p style='color: red; font-weight: bold; text-align: center;'>" . $_SESSION['erro'] . "</p>";
+        unset($_SESSION['erro']);
+    }
+
+    if (isset($_SESSION['sucesso'])) {
+        echo "<p style='color: green; font-weight: bold; text-align: center;'>" . $_SESSION['sucesso'] . "</p>";
+        unset($_SESSION['sucesso']);
+    }
+    ?>
+
     <div class="animais-container">
         <?php foreach ($animais as $animal):
             $imgs = getImagensAnimal($animal['tipo_animal']);
@@ -285,17 +305,28 @@ select[name="hora_consulta"] {
     <p class="mensagem" id="mensagem">Selecione um animal para agendar.</p>
 
     <div id="calendario-container">
-        <form action="agendar_consulta.php" method="POST">
+        <form action="agendar_consulta.php" method="POST" id="form-agendamento">
             <input type="hidden" name="animal_id" id="animal_id">
+
             <h3>Escolha a data:</h3>
-            <input type="date" name="data_consulta" required min="<?= $dataAtual ?>">
+            <input type="date" name="data_consulta" id="data_consulta" required min="<?= $dataAtual ?>">
+
             <h3>Escolha o horário:</h3>
-<select name="hora_consulta" required>
-    <option value="" disabled selected>Selecione um horário</option>
-    <?php foreach ($opcoesHorario as $hora): ?>
-        <option value="<?= $hora ?>"><?= $hora ?></option>
-    <?php endforeach; ?>
-</select>
+            <select name="hora_consulta" id="hora_consulta" required>
+                <option value="" disabled selected>Selecione um horário</option>
+                <?php foreach ($opcoesHorario as $hora): ?>
+                    <option value="<?= $hora ?>"><?= $hora ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <h3>Escolha o veterinário:</h3>
+            <select name="veterinario_id" id="veterinario_id" required>
+                <option value="" disabled selected>Selecione um veterinário</option>
+                <?php foreach ($veterinarios as $vet): ?>
+                    <option value="<?= $vet['id'] ?>"><?= htmlspecialchars($vet['nome']) ?></option>
+                <?php endforeach; ?>
+            </select>
+
             <br><br>
             <button type="submit" class="agendar-button">Confirmar Agendamento</button>
         </form>
@@ -346,17 +377,15 @@ select[name="hora_consulta"] {
     });
 
     // Verifica se é domingo e alerta o usuário
-  const inputData = document.querySelector('input[name="data_consulta"]');
+    const inputData = document.getElementById('data_consulta');
 
-  inputData.addEventListener('change', function() {
-    const dataSelecionada = new Date(this.value + 'T00:00:00'); // garante que pegue o dia correto
-
-    if (dataSelecionada.getDay() === 0) { // domingo = 0
-      alert('Domingos não são permitidos para agendamento.');
-      this.value = ''; // limpa o campo para forçar nova escolha
-    }
-  });
-
+    inputData.addEventListener('change', function() {
+        const dataSelecionada = new Date(this.value + 'T00:00:00'); // garante o dia correto
+        if (dataSelecionada.getDay() === 0) { // domingo = 0
+            alert('Domingos não são permitidos para agendamento.');
+            this.value = ''; // limpa para forçar nova escolha
+        }
+    });
 </script>
 
 </body>

@@ -1,46 +1,55 @@
 <?php
 session_start();
+include 'conexao.php';
 
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: /Veterinaria/index.html");
     exit();
 }
 
-include 'conexao.php'; // arquivo que conecta ao banco
-
-// Pega os dados do formulário
-$usuario_id = $_SESSION['usuario_id'];
+$usuario_id = $_SESSION['usuario_id'];  // Pega o id do usuário logado
 $animal_id = $_POST['animal_id'] ?? null;
 $data_consulta = $_POST['data_consulta'] ?? null;
 $hora_consulta = $_POST['hora_consulta'] ?? null;
+$veterinario_id = $_POST['veterinario_id'] ?? null;
 
-// Valida os dados mínimos
-if (!$animal_id || !$data_consulta || !$hora_consulta) {
-    die("Dados incompletos para o agendamento.");
+if (!$animal_id || !$data_consulta || !$hora_consulta || !$veterinario_id) {
+    $_SESSION['erro'] = "Todos os campos são obrigatórios.";
+    header("Location: dashboard.php");
+    exit();
 }
 
-// Verifica se o animal pertence ao usuário
-$sqlVerifica = "SELECT id FROM animais WHERE id = ? AND usuario_id = ?";
-$stmtVerifica = $conn->prepare($sqlVerifica);
-$stmtVerifica->bind_param("ii", $animal_id, $usuario_id);
-$stmtVerifica->execute();
-$resultVerifica = $stmtVerifica->get_result();
-
-if ($resultVerifica->num_rows === 0) {
-    die("Animal inválido ou não pertence a você.");
+// Validar que não é domingo
+if ((new DateTime($data_consulta))->format('w') == 0) {
+    $_SESSION['erro'] = "Domingos não são permitidos para agendamento.";
+    header("Location: dashboard.php");
+    exit();
 }
 
-// Insere o agendamento
-$sqlInsere = "INSERT INTO consultas (usuario_id, animal_id, data_consulta, hora_consulta) VALUES (?, ?, ?, ?)";
-$stmtInsere = $conn->prepare($sqlInsere);
-$stmtInsere->bind_param("iiss", $usuario_id, $animal_id, $data_consulta, $hora_consulta);
+// Verificar se veterinário já tem consulta nesse dia e hora
+$sqlVerifica = "SELECT COUNT(*) as total FROM consultas WHERE veterinario_id = ? AND data_consulta = ? AND hora_consulta = ?";
+$stmt = $conn->prepare($sqlVerifica);
+$stmt->bind_param("iss", $veterinario_id, $data_consulta, $hora_consulta);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
-if ($stmtInsere->execute()) {
-    // Sucesso - redireciona para página de confirmação ou área do cliente
-    header("Location: dashboard.php?msg=agendamento_sucesso");
+if ($row['total'] > 0) {
+    $_SESSION['erro'] = "O veterinário escolhido já possui uma consulta marcada para este dia e horário.";
+    header("Location: dashboard.php");
+    exit();
+}
+
+// Inserir consulta incluindo usuario_id
+$sqlInsert = "INSERT INTO consultas (usuario_id, animal_id, veterinario_id, data_consulta, hora_consulta) VALUES (?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sqlInsert);
+$stmt->bind_param("iiiss", $usuario_id, $animal_id, $veterinario_id, $data_consulta, $hora_consulta);
+
+if ($stmt->execute()) {
+    $_SESSION['sucesso'] = "Consulta agendada com sucesso!";
 } else {
-    echo "Erro ao agendar: " . $conn->error;
+    $_SESSION['erro'] = "Erro ao agendar a consulta. Tente novamente.";
 }
 
-$conn->close();
-?>
+header("Location: dashboard.php");
+exit();

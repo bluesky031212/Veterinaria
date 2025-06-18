@@ -37,6 +37,11 @@ if ($saude_animal === "1" && !empty($saude_detalhe)) {
     $saude_animal = "1: " . $saude_detalhe;
 }
 
+$raca_animal = trim($_POST['raca_animal']);
+if (empty($raca_animal)) {
+    $raca_animal = "Sem raça definida ou não sabe";
+}
+
 // Insere o usuário na tabela de usuários
 $stmt_user = $conn->prepare("INSERT INTO usuarios (nome, email, senha, telefone, nif, idade, aceitou_politica) VALUES (?, ?, ?, ?, ?, ?, ?)");
 $stmt_user->bind_param("sssssis", $nome, $email, $senha, $telefone, $nif, $idade, $aceitou_politica);

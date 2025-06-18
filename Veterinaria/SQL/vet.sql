@@ -22,6 +22,7 @@ CREATE TABLE animais (
     genero_animal VARCHAR(10),
     saude_animal BOOLEAN,
     saude_detalhe TEXT,
+    imagem_animal VARCHAR(255) null,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
