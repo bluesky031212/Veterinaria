@@ -300,9 +300,17 @@ $opcoesHorario = gerarOpcoesHorario();
             >
             <div class="animal-nome"><?= htmlspecialchars($animal['nome_animal']) ?></div>
 
-            <form action="excluir_animal.php" method="POST" onsubmit="return confirm('Deseja realmente excluir este animal?');">
-                <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
-                <button type="submit" class="excluir-button">Excluir</button> <!-- CORRIGIDO -->
+            <!-- Formulário de exclusão -->
+<form action="excluir_animal.php" method="POST" onsubmit="return confirm('Deseja realmente excluir este animal?');" style="display:inline;">
+    <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
+    <button type="submit" class="excluir-button">Excluir</button>
+</form>
+
+<!-- Formulário de edição -->
+<form action="editar_animal.php" method="GET" style="display:inline;">
+    <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
+    <button type="submit" class="button">Editar</button>
+</form>
             </form>
         </div>
         <?php endforeach; ?>
@@ -318,20 +326,17 @@ $opcoesHorario = gerarOpcoesHorario();
             <h3>Escolha a data:</h3>
             <input type="date" name="data_consulta" id="data_consulta" required min="<?= $dataAtual ?>">
 
-            <h3>Escolha o horário:</h3>
-            <select name="hora_consulta" id="hora_consulta" required>
-                <option value="" disabled selected>Selecione um horário</option>
-                <?php foreach ($opcoesHorario as $hora): ?>
-                    <option value="<?= $hora ?>"><?= $hora ?></option>
-                <?php endforeach; ?>
-            </select>
-
             <h3>Escolha o veterinário:</h3>
             <select name="veterinario_id" id="veterinario_id" required>
                 <option value="" disabled selected>Selecione um veterinário</option>
                 <?php foreach ($veterinarios as $vet): ?>
                     <option value="<?= $vet['id'] ?>"><?= htmlspecialchars($vet['nome']) ?></option>
                 <?php endforeach; ?>
+            </select>
+
+                        <h3>Escolha o horário:</h3>
+            <select name="hora_consulta" id="hora_consulta" required>
+                <option value="" disabled selected>Selecione a data e o veterinário</option>
             </select>
 
             <br><br>
@@ -357,20 +362,21 @@ $opcoesHorario = gerarOpcoesHorario();
 <!-- ÁUDIO -->
 <audio id="som-hover"></audio>
 
-<!-- SCRIPT -->
 <script>
     const animais = document.querySelectorAll('.animal-card img');
     const mensagem = document.getElementById("mensagem");
     const calendario = document.getElementById("calendario-container");
     const inputAnimalId = document.getElementById("animal_id");
     const som = document.getElementById("som-hover");
+    const inputData = document.getElementById('data_consulta');
+    const selectHora = document.getElementById('hora_consulta');
+    const selectVet = document.getElementById('veterinario_id');
 
     animais.forEach(img => {
         img.addEventListener("mouseenter", () => {
             img.src = img.dataset.gif + "?t=" + Date.now();
-            const somAnimal = img.dataset.som;
-            if (somAnimal) {
-                som.src = somAnimal;
+            if (img.dataset.som) {
+                som.src = img.dataset.som;
                 som.currentTime = 0;
                 som.play();
             }
@@ -383,23 +389,70 @@ $opcoesHorario = gerarOpcoesHorario();
         });
 
         img.addEventListener("click", () => {
-            const nome = img.dataset.nome;
-            const id = img.dataset.id;
-            mensagem.textContent = `Deseja agendar uma nova marcação para ${nome}?`;
-            inputAnimalId.value = id;
+            mensagem.textContent = `Deseja agendar uma nova marcação para ${img.dataset.nome}?`;
+            inputAnimalId.value = img.dataset.id;
             calendario.style.display = "block";
         });
     });
 
-    const inputData = document.getElementById('data_consulta');
+    inputData.addEventListener('change', atualizarHorarios);
+    selectVet.addEventListener('change', atualizarHorarios);
 
-    inputData.addEventListener('change', function() {
-        const dataSelecionada = new Date(this.value + 'T00:00:00');
-        if (dataSelecionada.getDay() === 0) {
-            alert('Domingos não são permitidos para agendamento.');
-            this.value = '';
+    function atualizarHorarios() {
+        const data = inputData.value;
+        const vetId = selectVet.value;
+
+        if (!data || !vetId) {
+            selectHora.innerHTML = '<option value="" disabled selected>Selecione a data e o veterinário</option>';
+            return;
         }
-    });
-</script>
 
+        // Impedir agendamento para domingos
+        if (new Date(data).getDay() === 0) {
+            alert('Domingos não são permitidos para agendamento.');
+            inputData.value = '';
+            selectHora.innerHTML = '<option value="" disabled selected>Selecione um horário</option>';
+            return;
+        }
+
+        fetch(`horarios_ocupados.php?data=${data}&veterinario_id=${vetId}`)
+            .then(response => response.json())
+            .then(ocupados => {
+                selectHora.innerHTML = '<option value="" disabled selected>Selecione um horário</option>';
+
+                const horarios = <?= json_encode($opcoesHorario) ?>;
+                const agora = new Date();
+                const duasHorasDepois = new Date(agora.getTime() + 2 * 60 * 60 * 1000);
+                const hoje = data === agora.toISOString().split('T')[0];
+
+                let encontrou = false;
+
+                horarios.forEach(hora => {
+                    const [h, m] = hora.split(':');
+                    const dataHora = new Date(data);
+                    dataHora.setHours(parseInt(h), parseInt(m), 0, 0);
+
+                    const valido = (!hoje || dataHora > duasHorasDepois) && !ocupados.includes(hora);
+                    if (valido) {
+                        const opt = document.createElement('option');
+                        opt.value = hora;
+                        opt.textContent = hora;
+                        selectHora.appendChild(opt);
+                        encontrou = true;
+                    }
+                });
+
+                if (!encontrou) {
+                    const opt = document.createElement('option');
+                    opt.disabled = true;
+                    opt.textContent = "Sem horários disponíveis.";
+                    selectHora.appendChild(opt);
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao buscar horários:", err);
+                selectHora.innerHTML = '<option value="">Erro ao carregar horários</option>';
+            });
+    }
+</script>
 </body>

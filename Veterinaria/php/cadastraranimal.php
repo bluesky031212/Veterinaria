@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Receber dados do formulário
     $nome_animal     = $_POST['nome_animal'];
     $tipo_animal     = $_POST['tipo_animal'];
-    $porte_animal    = $_POST['porte_animal'];
     $raca_animal     = $_POST['raca_animal'];
     $idade_animal    = intval($_POST['idade_animal']);
     $genero_animal   = $_POST['genero_animal'];
@@ -33,15 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Inserir animal no banco de dados
     $stmt_animal = $conn->prepare("INSERT INTO animais 
-        (usuario_id, nome_animal, tipo_animal, porte_animal, raca_animal, idade_animal, genero_animal, saude_animal, saude_detalhe) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        (usuario_id, nome_animal, tipo_animal, raca_animal, idade_animal, genero_animal, saude_animal, saude_detalhe) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt_animal->bind_param(
-        "issssisis",
+        "isssisis",
         $usuarios_id,
         $nome_animal,
         $tipo_animal,
-        $porte_animal,
         $raca_animal,
         $idade_animal,
         $genero_animal,
@@ -144,18 +142,6 @@ $conn->close();
               <option value="Ave">Ave</option>
               <!-- Adicione mais opções conforme necessário -->
           </select>
-      </div>
-
-      <!-- *Classificação por porte -->
-
-      <div class="form-group">
-        <label>Classificação por porte *</label>
-        <select name="porte_animal" required>
-          <option value="">Selecione...</option>
-          <option value="Pequeno porte">Pequeno porte</option>
-          <option value="Médio porte">Médio porte</option>
-          <option value="Grande porte">Grande porte</option>
-        </select>
       </div>
 
       <!-- *Raça do animal -->
