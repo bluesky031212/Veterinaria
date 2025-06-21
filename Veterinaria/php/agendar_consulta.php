@@ -26,10 +26,14 @@ if ((new DateTime($data_consulta))->format('w') == 0) {
     exit();
 }
 
-// Verificar se veterinário já tem consulta nesse dia e hora
-$sqlVerifica = "SELECT COUNT(*) as total FROM consultas WHERE veterinario_id = ? AND data_consulta = ? AND hora_consulta = ?";
-$stmt = $conn->prepare($sqlVerifica);
-$stmt->bind_param("iss", $veterinario_id, $data_consulta, $hora_consulta);
+
+$sql = "SELECT * FROM consultas 
+        WHERE data_consulta = ? 
+          AND hora_consulta = ? 
+          AND veterinario_id = ?
+          AND status_consulta = 'agendada'";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ssi", $data, $hora, $veterinario_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();

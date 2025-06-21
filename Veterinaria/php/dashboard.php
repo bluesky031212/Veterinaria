@@ -284,24 +284,31 @@ $opcoesHorario = gerarOpcoesHorario();
     }
     ?>
 
+    <!-- LISTA DOS ANIMAIS -->
     <div class="animais-container">
         <?php foreach ($animais as $animal):
             $imgs = getImagensAnimal($animal['tipo_animal']);
         ?>
-            <div class="animal-card">
-                <img 
-                    src="<?= $imgs['fixo'] ?>" 
-                    data-fixo="<?= $imgs['fixo'] ?>" 
-                    data-gif="<?= $imgs['gif'] ?>" 
-                    data-som="<?= $imgs['som'] ?>" 
-                    data-nome="<?= htmlspecialchars($animal['nome_animal']) ?>" 
-                    data-id="<?= $animal['id'] ?>"
-                >
-                <div class="animal-nome"><?= htmlspecialchars($animal['nome_animal']) ?></div>
-            </div>
+        <div class="animal-card">
+            <img 
+                src="<?= $imgs['fixo'] ?>" 
+                data-fixo="<?= $imgs['fixo'] ?>" 
+                data-gif="<?= $imgs['gif'] ?>" 
+                data-som="<?= $imgs['som'] ?>" 
+                data-nome="<?= htmlspecialchars($animal['nome_animal']) ?>" 
+                data-id="<?= $animal['id'] ?>"
+            >
+            <div class="animal-nome"><?= htmlspecialchars($animal['nome_animal']) ?></div>
+
+            <form action="excluir_animal.php" method="POST" onsubmit="return confirm('Deseja realmente excluir este animal?');">
+                <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
+                <button type="submit" class="excluir-button">Excluir</button> <!-- CORRIGIDO -->
+            </form>
+        </div>
         <?php endforeach; ?>
     </div>
 
+    <!-- MOVIDO PARA FORA DO FOREACH -->
     <p class="mensagem" id="mensagem">Selecione um animal para agendar.</p>
 
     <div id="calendario-container">
@@ -332,17 +339,25 @@ $opcoesHorario = gerarOpcoesHorario();
         </form>
     </div>
 
-    <div class="botoes-container">
-        <a class="button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
-        <a class="button" href="/Veterinaria/index.html">Voltar ao Início</a>
-        <form action="excluir_conta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta?');">
-            <button type="submit" class="excluir-button">Excluir Conta</button>
-        </form>
-    </div>
+    <!-- BOTÕES INFERIORES -->
+<div class="botoes-container">
+
+    <form action="/Veterinaria/php/logout.php" method="POST">
+        <button type="submit" class="button">Encerrar Sessão</button>
+    </form>
+    <a class="button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
+    <a class="button" href="/Veterinaria/php/minhas_consultas.php">Minhas Consultas</a> <!-- NOVO BOTÃO -->
+    <form action="excluir_conta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta?');">
+        <button type="submit" class="excluir-button">Excluir Conta</button>
+    </form>
 </div>
 
+</div>
+
+<!-- ÁUDIO -->
 <audio id="som-hover"></audio>
 
+<!-- SCRIPT -->
 <script>
     const animais = document.querySelectorAll('.animal-card img');
     const mensagem = document.getElementById("mensagem");
@@ -376,17 +391,15 @@ $opcoesHorario = gerarOpcoesHorario();
         });
     });
 
-    // Verifica se é domingo e alerta o usuário
     const inputData = document.getElementById('data_consulta');
 
     inputData.addEventListener('change', function() {
-        const dataSelecionada = new Date(this.value + 'T00:00:00'); // garante o dia correto
-        if (dataSelecionada.getDay() === 0) { // domingo = 0
+        const dataSelecionada = new Date(this.value + 'T00:00:00');
+        if (dataSelecionada.getDay() === 0) {
             alert('Domingos não são permitidos para agendamento.');
-            this.value = ''; // limpa para forçar nova escolha
+            this.value = '';
         }
     });
 </script>
 
 </body>
-</html>
