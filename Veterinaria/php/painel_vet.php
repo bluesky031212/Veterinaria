@@ -9,8 +9,8 @@ include 'conexao.php';
 
 $vet_id = $_SESSION['vet_id'];
 
-// Buscar os animais e suas marcações associadas ao veterinário
 $sql = "SELECT 
+            m.id AS consulta_id,
             a.nome_animal,
             a.tipo_animal AS especie,
             a.raca_animal AS raca,
@@ -51,15 +51,16 @@ $result = $stmt->get_result();
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark">
                         <tr>
-                            <th>Nome do Animal</th>
+                            <th>Animal</th>
                             <th>Espécie</th>
                             <th>Raça</th>
-                            <th>Idade (anos)</th>
+                            <th>Idade</th>
                             <th>Dono</th>
-                            <th>Email do Dono</th>
-                            <th>Data e Hora</th>
+                            <th>Email</th>
+                            <th>Data/Hora</th>
                             <th>Sintomas</th>
                             <th>Status</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,24 +69,65 @@ $result = $stmt->get_result();
                                 <td><?= htmlspecialchars($row['nome_animal']) ?></td>
                                 <td><?= htmlspecialchars($row['especie']) ?></td>
                                 <td><?= htmlspecialchars($row['raca']) ?></td>
-                                <td><?= htmlspecialchars($row['idade']) ?></td>
+                                <td><?= htmlspecialchars($row['idade']) ?> anos</td>
                                 <td><?= htmlspecialchars($row['nome_dono']) ?></td>
                                 <td><?= htmlspecialchars($row['email_dono']) ?></td>
                                 <td><?= date('d/m/Y H:i', strtotime($row['data_consulta'] . ' ' . $row['hora_consulta'])) ?></td>
                                 <td><?= nl2br(htmlspecialchars($row['sintomas'])) ?></td>
-                        <td class="status-<?= htmlspecialchars($row['status_consulta']) ?>">
-                            <?= ucfirst(htmlspecialchars($row['status_consulta'])) ?>
-                        </td>
+                                <td class="status-<?= htmlspecialchars($row['status_consulta']) ?>">
+                                    <?= ucfirst(htmlspecialchars($row['status_consulta'])) ?>
+                                </td>
+                                <td>
+                                    <form action="atualizar_consulta.php" method="POST" class="d-flex flex-column gap-1">
+                                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
+                                        <button name="acao" value="realizada" class="btn btn-success btn-sm">Confirmar</button>
+                                        <button name="acao" value="cancelada" class="btn btn-warning btn-sm">Cancelar</button>
+                                        <button name="acao" value="editar" class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#editarModal<?= $row['consulta_id'] ?>">Editar</button>
+                                    </form>
+                                    <form action="excluir_consulta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta marcação?');">
+                                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
+                                        <button class="btn btn-danger btn-sm mt-1">Excluir</button>
+                                    </form>
+
+                                    <!-- Modal de Edição -->
+                                    <div class="modal fade" id="editarModal<?= $row['consulta_id'] ?>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <form action="atualizar_consulta.php" method="POST">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Editar Consulta</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
+                                                        <input type="hidden" name="acao" value="editar">
+                                                        <label>Nova Data:</label>
+                                                        <input type="date" name="nova_data" class="form-control" required>
+                                                        <label>Nova Hora:</label>
+                                                        <input type="time" name="nova_hora" class="form-control" required>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-primary" type="submit">Salvar</button>
+                                                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
                 </table>
             </div>
         <?php else: ?>
-            <div class="alert alert-info">Nenhuma marcação encontrada para você ainda.</div>
+            <div class="alert alert-info">Nenhuma marcação encontrada.</div>
         <?php endif; ?>
 
         <a href="logout.php" class="btn btn-danger mt-3">Sair</a>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

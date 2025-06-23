@@ -24,7 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Receber dados do formulário
     $nome_animal     = $_POST['nome_animal'];
     $tipo_animal     = $_POST['tipo_animal'];
-    $raca_animal     = $_POST['raca_animal'];
+$raca_animal = trim($_POST['raca_animal']);
+if (empty($raca_animal)) {
+    $raca_animal = "Sem Raça Definida/ Não sei...";
+}
     $idade_animal    = intval($_POST['idade_animal']);
     $genero_animal   = $_POST['genero_animal'];
     $saude_animal    = isset($_POST['saude_animal']) ? intval($_POST['saude_animal']) : 0;
@@ -91,7 +94,7 @@ $conn->close();
 
 <body>
   <header>
-    <h1>Vamos adicionar mais um animalzinho, <?php echo htmlspecialchars($usuario['id']); ?>?</h1>
+    <h1>Vamos adicionar mais um animalzinho, <?php echo htmlspecialchars($usuario['nome']); ?>?</h1>
   </header>
   <div class="formulario-container">
       <!-- !Dados do animal -->
@@ -148,7 +151,7 @@ $conn->close();
 
       <div class="form-group">
         <label>Raça</label>
-        <input type="text" name="raca_animal" placeholder="Sem Raça Definida.."required oninput="validarRaca(this)" />
+        <input type="text" name="raca_animal" placeholder="Sem Raça Definida/ Não sei..." oninput="validarRaca(this)" />
           <div class="invalid-feedback"></div>
       </div>
       

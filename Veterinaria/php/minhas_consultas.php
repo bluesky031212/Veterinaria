@@ -57,7 +57,7 @@ $conn->close();
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #76767671;
+            background-color:rgba(118, 118, 118, 0.77);
             border-radius: 10px;
             border: black 3px solid;
             text-align: center;
@@ -114,7 +114,7 @@ $conn->close();
     text-align: center;
     line-height: 25px;
     margin: auto;
-    display: block; /* 👈 Isso garante alinhamento no centro da <td> */
+    display: block; /*  Isso garante alinhamento no centro da <td> */
 }
 
 

@@ -23,15 +23,14 @@ body {
 
 /* === Cabeçalho === */
 header {
-  padding: 50px;
-  background-image: url(/Veterinaria/images/headline.png);
+  padding: 30px;
   background-color: transparent;
   background-position: center;
   font-family: 'MinecraftRegular';
   text-align: center;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 25px;
+  font-size: 15px;
   letter-spacing: 5.3px;
   text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   color: rgb(190, 190, 190);

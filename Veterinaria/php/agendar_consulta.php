@@ -33,7 +33,7 @@ $sql = "SELECT * FROM consultas
           AND veterinario_id = ?
           AND status_consulta = 'agendada'";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssi", $data, $hora, $veterinario_id);
+$stmt->bind_param("ssi", $data_consulta, $hora_consulta, $veterinario_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();

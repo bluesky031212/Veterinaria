@@ -9,6 +9,15 @@ if (!isset($_SESSION['usuario_id'])) {
 include 'conexao.php';
 $usuario_id = $_SESSION['usuario_id'];
 
+$sql = "SELECT nome, id FROM usuarios WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $usuario_id); // <- Correção aqui
+$stmt->execute();
+$result = $stmt->get_result();
+$usuario = $result->fetch_assoc();
+
+$nome_usuario = $usuario['nome'] ?? 'Usuário';
+
 // Pegar animais do usuário
 $sql = "SELECT * FROM animais WHERE usuario_id = ?";
 $stmt = $conn->prepare($sql);
@@ -16,6 +25,7 @@ $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $animais = $result->fetch_all(MYSQLI_ASSOC);
+
 
 // Pegar veterinários
 $sqlVet = "SELECT id, nome FROM veterinarios";
@@ -88,10 +98,15 @@ $opcoesHorario = gerarOpcoesHorario();
     <meta charset="UTF-8">
     <title>Área do Cliente</title>
     <style>
+
         @font-face {
-            font-family: 'minecraft';
-            src: url('/Veterinaria/fontes/Minecraft.ttf') format('truetype');
+    font-family: 'MinecraftRegular';
+  src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
         }
+
+
+        
+
 
         body {
             font-family: sans-serif;
@@ -104,17 +119,24 @@ $opcoesHorario = gerarOpcoesHorario();
         }
 
         header {
-            padding: 30px;
-            background-color: transparent;
-            background-position: center;
-            background-size: contain;
-            text-align: center;
+        padding: 30px;
+        background-color: transparent;
+        background-position: center;
+        font-family: 'MinecraftRegular';
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 15px;
+        letter-spacing: 5.3px;
+        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        color: rgb(190, 190, 190);
         }
+
 
         .container {
             max-width: 1000px;
             margin: 20px auto;
-            background-color: #76767671;
+            background-color:rgba(118, 118, 118, 0.77);
             border-radius: 10px;
             border: black 3px solid;
             padding: 20px;
@@ -130,7 +152,11 @@ $opcoesHorario = gerarOpcoesHorario();
         }
 
         .animal-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            width: 150px; /* ou ajuste conforme necessário */
         }
 
         .animal-card img {
@@ -144,8 +170,33 @@ $opcoesHorario = gerarOpcoesHorario();
         }
 
         .animal-nome {
+        display: flex;
+        justify-content: center;   /* Centraliza horizontalmente */
+        align-items: center;       /* Alinha verticalmente */
+        gap: 6px;                  /* Espaço entre nome e lápis */
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        }
+        .edit-nome-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        color: white;
+        padding: 0;
+        }
+
+                .mensagem-sucesso {
+            color:rgb(68, 255, 71); /* ou qualquer outra cor */
             font-weight: bold;
-            color: white;
+            text-align: center;
+        }
+
+        .mensagem-erro {
+            color:rgb(255, 72, 72); /* ou qualquer outra cor */
+            font-weight: bold;
+            text-align: center;
         }
 
         .mensagem {
@@ -260,6 +311,23 @@ $opcoesHorario = gerarOpcoesHorario();
             margin-top: 40px;
             border: rgba(0, 0, 0, 0.5) 2px solid;
         }
+
+
+        .edit-nome-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 5px;
+    color: white;
+}
+.edit-nome-btn:hover {
+    color: yellow;
+}
+.inline-edit-form input[type="text"] {
+    padding: 5px;
+    border-radius: 5px;
+}
         
     </style>
 </head>
@@ -267,19 +335,19 @@ $opcoesHorario = gerarOpcoesHorario();
 <body>
 
 <header>
-    <h1>Bem-vindo(a)!</h1>
+        <h1>Bem vindo(a), <?php echo htmlspecialchars($usuario['nome']); ?></h1>
 </header>
 
 <div class="container">
 
     <?php
     if (isset($_SESSION['erro'])) {
-        echo "<p style='color: red; font-weight: bold; text-align: center;'>" . $_SESSION['erro'] . "</p>";
+        echo "<p class='mensagem-erro'>" . $_SESSION['erro'] . "</p>";
         unset($_SESSION['erro']);
     }
 
     if (isset($_SESSION['sucesso'])) {
-        echo "<p style='color: green; font-weight: bold; text-align: center;'>" . $_SESSION['sucesso'] . "</p>";
+        echo "<p class='mensagem-sucesso'>" . $_SESSION['sucesso'] . "</p>";
         unset($_SESSION['sucesso']);
     }
     ?>
@@ -298,18 +366,23 @@ $opcoesHorario = gerarOpcoesHorario();
                 data-nome="<?= htmlspecialchars($animal['nome_animal']) ?>" 
                 data-id="<?= $animal['id'] ?>"
             >
-            <div class="animal-nome"><?= htmlspecialchars($animal['nome_animal']) ?></div>
+            <div class="animal-nome" id="nome-animal-<?= $animal['id'] ?>">
+    <?= htmlspecialchars($animal['nome_animal']) ?>
+    <button class="edit-nome-btn" data-id="<?= $animal['id'] ?>" data-nome="<?= htmlspecialchars($animal['nome_animal']) ?>">🖉</button>
+</div>
+<div id="form-edicao-<?= $animal['id'] ?>" style="display: none; margin-top: 5px;">
+    <form action="editar_nome_animal.php" method="POST" class="inline-edit-form">
+        <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
+        <input type="text" name="novo_nome" value="<?= htmlspecialchars($animal['nome_animal']) ?>" required>
+        <button type="submit">Salvar</button>
+        <button type="button" class="cancelar-edicao" data-id="<?= $animal['id'] ?>">Cancelar</button>
+    </form>
+</div>
 
             <!-- Formulário de exclusão -->
 <form action="excluir_animal.php" method="POST" onsubmit="return confirm('Deseja realmente excluir este animal?');" style="display:inline;">
     <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
     <button type="submit" class="excluir-button">Excluir</button>
-</form>
-
-<!-- Formulário de edição -->
-<form action="editar_animal.php" method="GET" style="display:inline;">
-    <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
-    <button type="submit" class="button">Editar</button>
 </form>
             </form>
         </div>
@@ -352,6 +425,7 @@ $opcoesHorario = gerarOpcoesHorario();
     </form>
     <a class="button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
     <a class="button" href="/Veterinaria/php/minhas_consultas.php">Minhas Consultas</a> <!-- NOVO BOTÃO -->
+    <a class="button" href="/Veterinaria/php/editar_usuario.php">Editar Meus Dados</a>
     <form action="excluir_conta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta?');">
         <button type="submit" class="excluir-button">Excluir Conta</button>
     </form>
@@ -407,7 +481,7 @@ $opcoesHorario = gerarOpcoesHorario();
             return;
         }
 
-        // Impedir agendamento para domingos
+        // Bloqueia domingo
         if (new Date(data).getDay() === 0) {
             alert('Domingos não são permitidos para agendamento.');
             inputData.value = '';
@@ -415,39 +489,25 @@ $opcoesHorario = gerarOpcoesHorario();
             return;
         }
 
-        fetch(`horarios_ocupados.php?data=${data}&veterinario_id=${vetId}`)
+        fetch(`/Veterinaria/php/horarios_ocupados.php?data=${data}&veterinario_id=${vetId}`)
             .then(response => response.json())
-            .then(ocupados => {
+            .then(disponiveis => {
                 selectHora.innerHTML = '<option value="" disabled selected>Selecione um horário</option>';
 
-                const horarios = <?= json_encode($opcoesHorario) ?>;
-                const agora = new Date();
-                const duasHorasDepois = new Date(agora.getTime() + 2 * 60 * 60 * 1000);
-                const hoje = data === agora.toISOString().split('T')[0];
-
-                let encontrou = false;
-
-                horarios.forEach(hora => {
-                    const [h, m] = hora.split(':');
-                    const dataHora = new Date(data);
-                    dataHora.setHours(parseInt(h), parseInt(m), 0, 0);
-
-                    const valido = (!hoje || dataHora > duasHorasDepois) && !ocupados.includes(hora);
-                    if (valido) {
-                        const opt = document.createElement('option');
-                        opt.value = hora;
-                        opt.textContent = hora;
-                        selectHora.appendChild(opt);
-                        encontrou = true;
-                    }
-                });
-
-                if (!encontrou) {
+                if (disponiveis.length === 0) {
                     const opt = document.createElement('option');
                     opt.disabled = true;
                     opt.textContent = "Sem horários disponíveis.";
                     selectHora.appendChild(opt);
+                    return;
                 }
+
+                disponiveis.forEach(hora => {
+                    const opt = document.createElement('option');
+                    opt.value = hora;
+                    opt.textContent = hora;
+                    selectHora.appendChild(opt);
+                });
             })
             .catch(err => {
                 console.error("Erro ao buscar horários:", err);
@@ -455,4 +515,24 @@ $opcoesHorario = gerarOpcoesHorario();
             });
     }
 </script>
+
+
+<script>
+document.querySelectorAll('.edit-nome-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        document.getElementById('nome-animal-' + id).style.display = 'none';
+        document.getElementById('form-edicao-' + id).style.display = 'block';
+    });
+});
+
+document.querySelectorAll('.cancelar-edicao').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        document.getElementById('form-edicao-' + id).style.display = 'none';
+        document.getElementById('nome-animal-' + id).style.display = 'block';
+    });
+});
+</script>
+
 </body>
