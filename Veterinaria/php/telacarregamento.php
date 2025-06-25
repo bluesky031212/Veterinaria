@@ -4,7 +4,7 @@ session_start();
 // Determinar o destino com base na sessão
 $redirect_url = isset($_SESSION['usuario_id']) 
     ? "/Veterinaria/php/dashboard.php" 
-    : "/Veterinaria/index.html";
+    : "/Veterinaria/index.php";
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
