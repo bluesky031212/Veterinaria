@@ -391,17 +391,17 @@ $opcoesHorario = gerarOpcoesHorario();
     <div id="calendario-container">
         <form action="agendar_consulta.php" method="POST" id="form-agendamento">
             <input type="hidden" name="animal_id" id="animal_id">
+            
+                 <h3>Escolha o veterinário:</h3>
+            <select name="veterinario_id" id="veterinario_id" required>
+                     <option value="" disabled selected>Selecione um veterinário</option>
+                  <?php foreach ($veterinarios as $vet): ?>
+                     <option value="<?= $vet['id'] ?>"><?= htmlspecialchars($vet['nome']) ?></option>
+                   <?php endforeach; ?>
+            </select>
 
             <h3>Escolha a data:</h3>
             <input type="date" name="data_consulta" id="data_consulta" required min="<?= $dataAtual ?>">
-
-            <h3>Escolha o veterinário:</h3>
-            <select name="veterinario_id" id="veterinario_id" required>
-                <option value="" disabled selected>Selecione um veterinário</option>
-                <?php foreach ($veterinarios as $vet): ?>
-                    <option value="<?= $vet['id'] ?>"><?= htmlspecialchars($vet['nome']) ?></option>
-                <?php endforeach; ?>
-            </select>
 
                         <h3>Escolha o horário:</h3>
             <select name="hora_consulta" id="hora_consulta" required>

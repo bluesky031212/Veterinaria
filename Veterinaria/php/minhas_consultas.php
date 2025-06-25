@@ -1,20 +1,34 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: /Veterinaria/index.php");
+    exit();
+}
+
+$usuario_id = $_SESSION['usuario_id'];
+
 include 'conexao.php';
 
+// Gera o token CSRF se ainda não existir
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+// Consulta apenas as consultas dos animais do usuário logado
 $sql = "SELECT c.id, a.nome_animal, v.nome AS nome_veterinario,
                c.data_consulta, c.hora_consulta,
                c.status_consulta, a.saude_detalhe
         FROM consultas c
         JOIN animais a ON c.animal_id = a.id
         JOIN veterinarios v ON c.veterinario_id = v.id
+        WHERE a.usuario_id = ?
         ORDER BY c.data_consulta DESC, c.hora_consulta DESC";
 
-$resultado = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$resultado = $stmt->get_result();
 
 date_default_timezone_set('Europe/Lisbon');
 $hoje = new DateTime();
@@ -26,173 +40,110 @@ $hoje = new DateTime();
   <meta charset="UTF-8">
   <title>Minhas Marcações</title>
   <style>
-        @font-face {
-    font-family: 'MinecraftRegular';
-  src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
-}
+    @font-face {
+      font-family: 'MinecraftRegular';
+      src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
+    }
 
-        header {
-        padding: 30px;
-        background-color: transparent;
-        background-position: center;
-        font-family: 'MinecraftRegular';
-        text-align: center;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 15px;
-        letter-spacing: 5.3px;
-        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-        color: rgb(190, 190, 190);
-        }
+    header {
+      padding: 30px;
+      background-color: transparent;
+      background-position: center;
+      font-family: 'MinecraftRegular';
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 15px;
+      letter-spacing: 5.3px;
+      text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+      color: rgb(190, 190, 190);
+    }
 
-
-        body {
-            font-family: 'minecraft';
-            margin: 0;
-            padding: 0;
-            color: white;
-            background-image: url(/Veterinaria/images/background.png);
-            background-size: 100%;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
+    body {
+      font-family: 'minecraft', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white;
+      background-image: url(/Veterinaria/images/background.png);
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
 
     .tabela-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            color: white;
-            background-color:rgba(118, 118, 118, 0.77);
-            border-radius: 10px;
-            border: black 3px solid;
-            padding: 20px;
-            text-align: center;
+      max-width: 1000px;
+      margin: 20px auto;
+      color: white;
+      background-color: rgba(118, 118, 118, 0.77);
+      border-radius: 10px;
+      border: black 3px solid;
+      padding: 20px;
+      text-align: center;
     }
 
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid white;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: transparent;
-}
-
-tr {
-  background-color: transparent;
-}
-
-th, td {
-  padding: 12px;
-  text-align: center;
-  border: 1px solid rgb(255, 255, 255); /* linhas internas suaves */
-  background-color: transparent;
-  color: white;
-}
-
-th {
-  background-color: #007bff;
-  color: white;
-  border: 1px solid rgb(255, 255, 255);
-}
-
-th:first-child {
-  border-top-left-radius: 12px;
-}
-
-th:last-child {
-  border-top-right-radius: 12px;
-}
-    .agendada {
-      color: limegreen;
-      font-weight: bold;
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid white;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: transparent;
     }
 
-    .realizada {
-      color: lightblue;
-      font-weight: bold;
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid rgb(255, 255, 255);
+      background-color: transparent;
+      color: white;
     }
 
-    .cancelada {
-      color: red;
-      font-weight: bold;
+    th {
+      background-color: #007bff;
+      color: white;
     }
 
-    .botao-cancelar {
-            font-family: 'minecraft', sans-serif;
-            padding: 0 25px;
-            background-color: transparent;
-            background-image: url('/Veterinaria/images/butao2.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            color: white;
-            cursor: pointer;
-            font-size: 13px;
-            text-decoration: none;
+    th:first-child { border-top-left-radius: 12px; }
+    th:last-child  { border-top-right-radius: 12px; }
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .agendada   { color: limegreen; font-weight: bold; }
+    .realizada  { color: lightblue; font-weight: bold; }
+    .cancelada  { color: red; font-weight: bold; }
 
-            height: 38px;
-            min-width: 140px;
-            line-height: 38px;
-            border: none;
-            box-sizing: border-box;
+    .botao-cancelar, .botao-voltar, .descricao-btn {
+      font-family: 'minecraft', sans-serif;
+      padding: 0 25px;
+      background-color: transparent;
+      background-image: url('/Veterinaria/images/butao2.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+      min-width: 140px;
+      line-height: 38px;
+      border: none;
+      box-sizing: border-box;
     }
 
     .botao-voltar {
-            font-family: 'minecraft', sans-serif;
-            padding: 25px;
-            background-color: transparent;
-            background-image: url('/Veterinaria/images/butao2.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            color: white;
-            cursor: pointer;
-            font-size: 13px;
-            text-decoration: none;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            height: 45px;
-            min-width: 140px;
-            line-height: 45px;
-            border: none;
-            box-sizing: border-box;
+      height: 45px;
+      line-height: 45px;
+      margin-top: 20px;
     }
 
-    .botao-voltar:hover, .botao-cancelar:hover, .descricao-btn:hover {
-            background-image: url('/Veterinaria/images/butao1.png');
-            transform: scale(1.05);
-    }
-
-    .descricao-btn {
-            font-family: 'minecraft', sans-serif;
-            padding: 0 25px;
-            background-color: transparent;
-            background-image: url('/Veterinaria/images/butao2.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            color: white;
-            cursor: pointer;
-            font-size: 13px;
-            text-decoration: none;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            height: 38px;
-            min-width: 140px;
-            line-height: 38px;
-            border: none;
-            box-sizing: border-box;
+    .botao-cancelar:hover,
+    .botao-voltar:hover,
+    .descricao-btn:hover {
+      background-image: url('/Veterinaria/images/butao1.png');
+      transform: scale(1.05);
     }
 
     .descricao-texto {
@@ -200,6 +151,7 @@ th:last-child {
       margin-top: 5px;
     }
   </style>
+
   <script>
     function toggleDescricao(id) {
       var el = document.getElementById('descricao-' + id);
@@ -207,11 +159,12 @@ th:last-child {
     }
   </script>
 </head>
-<header>
-  <h1>Minhas Consultas</h1>
-  </header>
 
 <body>
+  <header>
+    <h1>Minhas Consultas</h1>
+  </header>
+
   <div class="tabela-container">
     <table>
       <tr>
@@ -268,8 +221,8 @@ th:last-child {
           }
       }
       ?>
-
     </table>
+
     <a href="dashboard.php" class="botao-voltar">Voltar para minha área</a>
   </div>
 </body>
