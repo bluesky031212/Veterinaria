@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: /Veterinaria/index.html");
+    header("Location: /Veterinaria/index.php");
     exit();
 }
 
@@ -41,7 +41,7 @@ try {
     session_destroy();
 
     // Redireciona para a página de confirmação ou página inicial
-    header("Location: /Veterinaria/index.html");
+    header("Location: /Veterinaria/index.php");
     exit();
 
 } catch (Exception $e) {

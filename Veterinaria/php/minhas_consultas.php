@@ -8,7 +8,7 @@ if (empty($_SESSION['csrf_token'])) {
 
 $sql = "SELECT c.id, a.nome_animal, v.nome AS nome_veterinario,
                c.data_consulta, c.hora_consulta,
-               c.status_consulta, c.descricao_consulta
+               c.status_consulta, a.saude_detalhe
         FROM consultas c
         JOIN animais a ON c.animal_id = a.id
         JOIN veterinarios v ON c.veterinario_id = v.id
@@ -26,39 +26,83 @@ $hoje = new DateTime();
   <meta charset="UTF-8">
   <title>Minhas Marcações</title>
   <style>
-    body {
-      background-image: url('/Veterinaria/images/background.png');
-      background-size: cover;
-      background-position: center;
-      font-family: 'minecraft', sans-serif;
-    }
+        @font-face {
+    font-family: 'MinecraftRegular';
+  src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
+}
+
+        header {
+        padding: 30px;
+        background-color: transparent;
+        background-position: center;
+        font-family: 'MinecraftRegular';
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 15px;
+        letter-spacing: 5.3px;
+        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        color: rgb(190, 190, 190);
+        }
+
+
+        body {
+            font-family: 'minecraft';
+            margin: 0;
+            padding: 0;
+            color: white;
+            background-image: url(/Veterinaria/images/background.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
 
     .tabela-container {
-      background-color: rgba(0, 0, 0, 0.7);
-      max-width: 90%;
-      margin: 100px auto;
-      padding: 30px;
-      border-radius: 10px;
-      color: #fff;
-      box-shadow: 0 0 15px #000;
+            max-width: 1000px;
+            margin: 20px auto;
+            color: white;
+            background-color:rgba(118, 118, 118, 0.77);
+            border-radius: 10px;
+            border: black 3px solid;
+            padding: 20px;
+            text-align: center;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid white;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: transparent;
+}
 
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #444;
-    }
+tr {
+  background-color: transparent;
+}
 
-    th {
-      background-color: #007bff;
-      color: white;
-    }
+th, td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid rgb(255, 255, 255); /* linhas internas suaves */
+  background-color: transparent;
+  color: white;
+}
 
+th {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+}
     .agendada {
       color: limegreen;
       font-weight: bold;
@@ -100,7 +144,7 @@ $hoje = new DateTime();
 
     .botao-voltar {
             font-family: 'minecraft', sans-serif;
-            padding: 0 25px;
+            padding: 25px;
             background-color: transparent;
             background-image: url('/Veterinaria/images/butao2.png');
             background-repeat: no-repeat;
@@ -110,14 +154,14 @@ $hoje = new DateTime();
             cursor: pointer;
             font-size: 13px;
             text-decoration: none;
-
+            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
 
-            height: 38px;
+            height: 45px;
             min-width: 140px;
-            line-height: 38px;
+            line-height: 45px;
             border: none;
             box-sizing: border-box;
     }
@@ -163,6 +207,10 @@ $hoje = new DateTime();
     }
   </script>
 </head>
+<header>
+  <h1>Minhas Consultas</h1>
+  </header>
+
 <body>
   <div class="tabela-container">
     <table>

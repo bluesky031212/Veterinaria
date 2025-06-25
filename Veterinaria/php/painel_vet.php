@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['vet_id'])) {
-    header("Location: /Veterinaria/index.html");
+    header("Location: /Veterinaria/index.php");
     exit();
 }
 
