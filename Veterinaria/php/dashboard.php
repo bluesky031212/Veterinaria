@@ -53,13 +53,13 @@ function getImagensAnimal($tipo) {
                 'gif' => '/Veterinaria/images/gato-pisca.gif',
                 'som' => '/Veterinaria/som/gato.mp3'
             ];
-        case 'Ave':
+        case 'Galinha':
             return [
                 'fixo' => '/Veterinaria/images/galinha pisca.png',
                 'gif' => '/Veterinaria/images/galinha-pisca.gif',
                 'som' => '/Veterinaria/som/galinha.mp3'
             ];
-        case 'Roedor':
+        case 'Hamster':
             return [
                 'fixo' => '/Veterinaria/images/hamster-pisca.png',
                 'gif' => '/Veterinaria/images/hamster-pisca.gif',
@@ -104,12 +104,8 @@ $opcoesHorario = gerarOpcoesHorario();
   src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
         }
 
-
-        
-
-
         body {
-            font-family: sans-serif;
+            font-family: 'minecraft';
             margin: 0;
             padding: 0;
             background-image: url(/Veterinaria/images/background.png);
@@ -456,7 +452,7 @@ $opcoesHorario = gerarOpcoesHorario();
             }
         });
 
-        img.addEventListener("mouseleave", () => {
+        img.addEventListener("mouseleGalinha", () => {
             img.src = img.dataset.fixo;
             som.pause();
             som.currentTime = 0;

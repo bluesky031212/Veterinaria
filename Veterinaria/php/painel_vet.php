@@ -15,12 +15,12 @@ $sql = "SELECT
             a.tipo_animal AS especie,
             a.raca_animal AS raca,
             a.idade_animal AS idade,
+            a.saude_detalhe AS saude,
             u.nome AS nome_dono,
             u.email AS email_dono,
             m.data_consulta,
             m.hora_consulta,
-            m.status_consulta,
-            m.descricao_consulta AS sintomas
+            m.status_consulta
         FROM animais a
         INNER JOIN usuarios u ON a.usuario_id = u.id
         INNER JOIN consultas m ON a.id = m.animal_id
@@ -58,7 +58,7 @@ $result = $stmt->get_result();
                             <th>Dono</th>
                             <th>Email</th>
                             <th>Data/Hora</th>
-                            <th>Sintomas</th>
+                            <th>Detalhes da Saúde</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </tr>
@@ -73,17 +73,20 @@ $result = $stmt->get_result();
                                 <td><?= htmlspecialchars($row['nome_dono']) ?></td>
                                 <td><?= htmlspecialchars($row['email_dono']) ?></td>
                                 <td><?= date('d/m/Y H:i', strtotime($row['data_consulta'] . ' ' . $row['hora_consulta'])) ?></td>
-                                <td><?= nl2br(htmlspecialchars($row['sintomas'])) ?></td>
-                                <td class="status-<?= htmlspecialchars($row['status_consulta']) ?>">
-                                    <?= ucfirst(htmlspecialchars($row['status_consulta'])) ?>
+                                <td><?= nl2br(htmlspecialchars($row['saude'])) ?></td>
+                                <td class="status-<?= htmlspecialchars(strtolower($row['status_consulta'])) ?>">
+                                    <?= ucfirst(strtolower(htmlspecialchars($row['status_consulta']))) ?>
                                 </td>
                                 <td>
+                                    <!-- Ações: Confirmar / Cancelar / Editar -->
                                     <form action="atualizar_consulta.php" method="POST" class="d-flex flex-column gap-1">
                                         <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
                                         <button name="acao" value="realizada" class="btn btn-success btn-sm">Confirmar</button>
                                         <button name="acao" value="cancelada" class="btn btn-warning btn-sm">Cancelar</button>
                                         <button name="acao" value="editar" class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#editarModal<?= $row['consulta_id'] ?>">Editar</button>
                                     </form>
+
+                                    <!-- Excluir -->
                                     <form action="excluir_consulta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta marcação?');">
                                         <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
                                         <button class="btn btn-danger btn-sm mt-1">Excluir</button>

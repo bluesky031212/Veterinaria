@@ -141,8 +141,8 @@ $conn->close();
               <option value="" disabled selected>Selecione o tipo</option>
               <option value="Cachorro">Cachorro</option>
               <option value="Gato">Gato</option>
-              <option value="Roedor">Roedor</option>
-              <option value="Ave">Ave</option>
+              <option value="Hamster">Hamster</option>
+              <option value="Galinha">Galinha</option>
               <!-- Adicione mais opções conforme necessário -->
           </select>
       </div>
@@ -195,10 +195,10 @@ $conn->close();
             } else if (!tipoAnimal) {
               idadeAnimalFeedback.textContent = 'Selecione o tipo de animal antes de inserir a idade.';
               idadeAnimalInput.classList.add('is-invalid');
-            } else if (tipoAnimal === 'Roedor' && idadeAnimal > 12) {
-              idadeAnimalFeedback.textContent = 'A idade do roedor não pode ser maior que 12 anos.';
+            } else if (tipoAnimal === 'Hamster' && idadeAnimal > 12) {
+              idadeAnimalFeedback.textContent = 'A idade do Hamster não pode ser maior que 12 anos.';
               idadeAnimalInput.classList.add('is-invalid');
-            } else if (tipoAnimal !== 'Roedor' && idadeAnimal > 30) {
+            } else if (tipoAnimal !== 'Hamster' && idadeAnimal > 30) {
               idadeAnimalFeedback.textContent = `A idade não pode ser maior que 30 anos para ${tipoAnimal.toLowerCase()}.`;
               idadeAnimalInput.classList.add('is-invalid');
             } else {

@@ -34,7 +34,7 @@ $conn->close();
     <title>Minhas Consultas</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'minecraft';
             margin: 0;
             padding: 0;
             background-image: url(/Veterinaria/images/background.png);
@@ -65,12 +65,10 @@ $conn->close();
 
         table {
             width: 100%;
-            border-collapse: collapse;
         }
 
         th, td {
             padding: 12px;
-            border: 1px solid #ddd;
             text-align: center;
             color: white;
             background-color: #343a40;
@@ -80,6 +78,22 @@ $conn->close();
             background-color: #007BFF;
             color: white;
         }
+
+thead tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+thead tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
 
         .status-agendada {
             color: #28a745;
@@ -183,7 +197,7 @@ $conn->close();
                         <td class="status-<?= htmlspecialchars($consulta['status_consulta']) ?>">
                             <?= ucfirst(htmlspecialchars($consulta['status_consulta'])) ?>
                         </td>
-                        <td><?= htmlspecialchars($consulta['descricao_consulta']) ?></td>
+                        <td><?= htmlspecialchars($consulta['saude']) ?></td>
                         <td>
                             <?php if ($consulta['status_consulta'] === 'agendada'): ?>
                                 <form action="cancelar_consulta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja cancelar esta consulta?');">

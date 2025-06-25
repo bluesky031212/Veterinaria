@@ -24,7 +24,7 @@ $conn->close();
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'minecraft';
   margin: 0;
   padding: 0;
   background-image: url(/Veterinaria/images/background.png);
@@ -91,25 +91,23 @@ input[type="password"] {
 }
 
 .form-actions button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'minecraft';
-  padding: 10px 25px;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  background-image: url('/Veterinaria/images/butao2.png');
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 12px;
-  text-decoration: none;
-  transition: background-image 0.3s ease-in-out;
-  height: 43px;
-  line-height: 43px;
-  min-width: 120px;
+    width: 160px;
+    height: 38px;
+    font-family: 'minecraft', sans-serif;
+    background-color: transparent;
+    background-image: url('/Veterinaria/images/butao2.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .form-actions button:hover {
