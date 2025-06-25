@@ -1,12 +1,21 @@
 <?php
-// Conexão com base de dados
+session_start();
 include 'conexao.php';
 
-// Obter marcações do banco de dados
-$sql = "SELECT * FROM marcacoes ORDER BY data DESC, hora DESC";
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$sql = "SELECT c.id, a.nome_animal, v.nome AS nome_veterinario,
+               c.data_consulta, c.hora_consulta,
+               c.status_consulta, c.descricao_consulta
+        FROM consultas c
+        JOIN animais a ON c.animal_id = a.id
+        JOIN veterinarios v ON c.veterinario_id = v.id
+        ORDER BY c.data_consulta DESC, c.hora_consulta DESC";
+
 $resultado = $conn->query($sql);
 
-// Data atual
 date_default_timezone_set('Europe/Lisbon');
 $hoje = new DateTime();
 ?>
@@ -18,10 +27,10 @@ $hoje = new DateTime();
   <title>Minhas Marcações</title>
   <style>
     body {
-      background-image: url('fundo.jpg'); /* Substitua pela imagem de fundo */
+      background-image: url('/Veterinaria/images/background.png');
       background-size: cover;
       background-position: center;
-      font-family: Arial, sans-serif;
+      font-family: 'minecraft', sans-serif;
     }
 
     .tabela-container {
@@ -55,34 +64,104 @@ $hoje = new DateTime();
       font-weight: bold;
     }
 
+    .realizada {
+      color: lightblue;
+      font-weight: bold;
+    }
+
     .cancelada {
       color: red;
       font-weight: bold;
     }
 
     .botao-cancelar {
-      background-color: #ccc;
-      border: 1px solid #333;
-      padding: 6px 10px;
-      border-radius: 5px;
-      cursor: pointer;
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 38px;
+            min-width: 140px;
+            line-height: 38px;
+            border: none;
+            box-sizing: border-box;
     }
 
     .botao-voltar {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #eee;
-      color: #000;
-      border: 1px solid #555;
-      border-radius: 5px;
-      text-decoration: none;
-      display: inline-block;
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 38px;
+            min-width: 140px;
+            line-height: 38px;
+            border: none;
+            box-sizing: border-box;
     }
 
-    .descricao-oculta {
+    .botao-voltar:hover, .botao-cancelar:hover, .descricao-btn:hover {
+            background-image: url('/Veterinaria/images/butao1.png');
+            transform: scale(1.05);
+    }
+
+    .descricao-btn {
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 38px;
+            min-width: 140px;
+            line-height: 38px;
+            border: none;
+            box-sizing: border-box;
+    }
+
+    .descricao-texto {
       display: none;
+      margin-top: 5px;
     }
   </style>
+  <script>
+    function toggleDescricao(id) {
+      var el = document.getElementById('descricao-' + id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
 </head>
 <body>
   <div class="tabela-container">
@@ -99,32 +178,37 @@ $hoje = new DateTime();
 
       <?php
       while ($row = $resultado->fetch_assoc()) {
-          $dataConsulta = new DateTime($row['data']);
+          $dataConsulta = new DateTime($row['data_consulta']);
+          $isPassado = $dataConsulta->format('Y-m-d') < $hoje->format('Y-m-d');
           $diferencaDias = $hoje->diff($dataConsulta)->days;
-          $isPassado = $dataConsulta < $hoje;
-
-          $status = $row['status'];
-          $mostrarLinha = !($status === 'Cancelada' && $isPassado && $diferencaDias >= 4);
+          $status = strtolower($row['status_consulta']);
+          $mostrarLinha = !($status === 'cancelada' && $isPassado && $diferencaDias >= 4);
 
           if ($mostrarLinha) {
+              $id = htmlspecialchars($row['id']);
+              $animal = htmlspecialchars($row['nome_animal']);
+              $veterinario = htmlspecialchars($row['nome_veterinario']);
+              $data = htmlspecialchars($row['data_consulta']);
+              $hora = htmlspecialchars($row['hora_consulta']);
+              $descricao = htmlspecialchars($row['saude_detalhe']);
+              $classeStatus = $status;
+
               echo "<tr>";
-              echo "<td>{$row['animal']}</td>";
-              echo "<td>{$row['veterinario']}</td>";
-              echo "<td>{$row['data']}</td>";
-              echo "<td>{$row['hora']}</td>";
+              echo "<td>$animal</td>";
+              echo "<td>$veterinario</td>";
+              echo "<td>$data</td>";
+              echo "<td>$hora</td>";
+              echo "<td class='$classeStatus'>" . ucfirst($status) . "</td>";
+              echo "<td>
+                      <button class='descricao-btn' onclick='toggleDescricao($id)'>Ver</button>
+                      <div id='descricao-$id' class='descricao-texto'>$descricao</div>
+                    </td>";
 
-              // Classe de status
-              $classeStatus = ($status === 'Agendada') ? 'agendada' : 'cancelada';
-              echo "<td class='$classeStatus'>$status</td>";
-
-              // Descrição oculta
-              echo "<td class='descricao-oculta'>{$row['descricao']}</td>";
-
-              // Ação
-              if ($status === 'Agendada') {
+              if ($status === 'agendada') {
                   echo "<td>
-                          <form method='post' action='cancelar.php' style='margin:0;'>
-                            <input type='hidden' name='id' value='{$row['id']}'>
+                          <form method='post' action='cancelar_consulta.php' style='margin:0;'>
+                            <input type='hidden' name='id' value='$id'>
+                            <input type='hidden' name='csrf_token' value='{$_SESSION['csrf_token']}'>
                             <button type='submit' class='botao-cancelar'>Cancelar</button>
                           </form>
                         </td>";
@@ -138,8 +222,7 @@ $hoje = new DateTime();
       ?>
 
     </table>
-
-    <a href="painel_usuario.php" class="botao-voltar">Voltar para minha área</a>
+    <a href="dashboard.php" class="botao-voltar">Voltar para minha área</a>
   </div>
 </body>
 </html>

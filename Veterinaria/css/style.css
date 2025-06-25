@@ -43,6 +43,7 @@
 
   .container {
    background-color:rgba(118, 118, 118, 0.564);
+    color: white;
     padding: 30px 40px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -81,6 +82,7 @@
 
   .btn:hover {
     background-image: url(/Veterinaria/images/butao1.png);
+    transform: scale(1.05);
   }
 
   .link {
@@ -88,11 +90,12 @@
     font-size: 10px;
     text-decoration: underline;
     display: block;
-    color: #552d00;
+    color: #ffffff;
   }
 
   .link:hover {
-    color: #000000;
+    color: #606060;
+    transform: scale(1.05);
   }
 
   .error {
