@@ -11,6 +11,7 @@ unset($_SESSION['login_erro']);
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login do Cliente</title>
   <link rel="stylesheet" href="/Veterinaria/css/style.css" />
+  <h1></h1>
 </head>
 <body>
   <div class="container">

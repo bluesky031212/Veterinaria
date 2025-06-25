@@ -422,7 +422,7 @@ $opcoesHorario = gerarOpcoesHorario();
     <a class="button" href="/Veterinaria/php/cadastraranimal.php">Adicionar Animal</a>
     <a class="button" href="/Veterinaria/php/minhas_consultas.php">Minhas Consultas</a> <!-- NOVO BOTÃO -->
     <a class="button" href="/Veterinaria/php/editar_usuario.php">Editar Meus Dados</a>
-    <form action="excluir_conta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta?');">
+    <form action="excluir_conta.php" method="POST" onsubmit="return confirm('Tens certeza que desejas excluir sua conta?\n(Todos os dados relativos ao usuário, animal e consulta será deletado do banco de dados)');">
         <button type="submit" class="excluir-button">Excluir Conta</button>
     </form>
 </div>
