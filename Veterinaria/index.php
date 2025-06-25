@@ -29,6 +29,8 @@ unset($_SESSION['login_erro']);
     </form>
 
     <a href="/Veterinaria/html/cadastro.html" class="link">Não é cliente? Cadastre-se aqui</a>
+    <a href="/Veterinaria/html/:p.html" class="link">Esqueceu a senha?</a>
+  </div>
   </div>
 </body>
 </html>

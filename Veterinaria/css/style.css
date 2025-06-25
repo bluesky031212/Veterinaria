@@ -30,12 +30,12 @@
   body {
     margin: 0;
     padding: 0;
+    color: white;
     background-color: #f0f2f574;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    font-family: Arial, sans-serif;
     background-image: url(/Veterinaria/images/background.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -46,6 +46,7 @@
     padding: 30px 40px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid black;
     text-align: center;
     width: 100%;
     max-width: 400px;
