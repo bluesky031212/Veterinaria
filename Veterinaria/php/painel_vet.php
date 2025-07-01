@@ -1,6 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['vet_id'])) {
+
+// Protege a página apenas para veterinários
+if (!isset($_SESSION['vet_id']) || $_SESSION['tipo'] !== 'veterinario') {
     header("Location: /Veterinaria/index.php");
     exit();
 }
@@ -78,47 +80,50 @@ $result = $stmt->get_result();
                                     <?= ucfirst(strtolower(htmlspecialchars($row['status_consulta']))) ?>
                                 </td>
                                 <td>
-                                    <!-- Ações: Confirmar / Cancelar / Editar -->
-                                    <form action="atualizar_consulta.php" method="POST" class="d-flex flex-column gap-1">
-                                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
-                                        <button name="acao" value="realizada" class="btn btn-success btn-sm">Confirmar</button>
-                                        <button name="acao" value="cancelada" class="btn btn-warning btn-sm">Cancelar</button>
-                                        <button name="acao" value="editar" class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#editarModal<?= $row['consulta_id'] ?>">Editar</button>
-                                    </form>
+    <!-- Ações: Confirmar / Cancelar / Editar -->
+    <form action="atualizar_consulta.php" method="POST" class="d-flex flex-column gap-1">
+        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
+        <button name="acao" value="realizada" class="btn btn-success btn-sm">Confirmar</button>
+        <button name="acao" value="cancelada" class="btn btn-warning btn-sm">Cancelar</button>
+        <button name="acao" value="editar" class="btn btn-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#editarModal<?= $row['consulta_id'] ?>">Editar</button>
+    </form>
 
-                                    <!-- Excluir -->
-                                    <form action="excluir_consulta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta marcação?');">
-                                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
-                                        <button class="btn btn-danger btn-sm mt-1">Excluir</button>
-                                    </form>
+    <!-- Excluir -->
+    <form action="excluir_consulta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta marcação?');">
+        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
+        <button class="btn btn-danger btn-sm mt-1">Excluir</button>
+    </form>
 
-                                    <!-- Modal de Edição -->
-                                    <div class="modal fade" id="editarModal<?= $row['consulta_id'] ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <form action="atualizar_consulta.php" method="POST">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Editar Consulta</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
-                                                        <input type="hidden" name="acao" value="editar">
-                                                        <label>Nova Data:</label>
-                                                        <input type="date" name="nova_data" class="form-control" required>
-                                                        <label>Nova Hora:</label>
-                                                        <input type="time" name="nova_hora" class="form-control" required>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-primary" type="submit">Salvar</button>
-                                                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+    <!-- Ver Consulta -->
+    <a href="response_medico.php?id=<?= $row['consulta_id'] ?>" class="btn btn-secondary btn-sm mt-1">Ver Consulta</a>
 
-                                </td>
+    <!-- Modal de Edição -->
+    <div class="modal fade" id="editarModal<?= $row['consulta_id'] ?>" tabindex="-1">
+        <div class="modal-dialog">
+            <form action="atualizar_consulta.php" method="POST">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Consulta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="consulta_id" value="<?= $row['consulta_id'] ?>">
+                        <input type="hidden" name="acao" value="editar">
+                        <label>Nova Data:</label>
+                        <input type="date" name="nova_data" class="form-control" required>
+                        <label>Nova Hora:</label>
+                        <input type="time" name="nova_hora" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</td>
+
                             </tr>
                         <?php endwhile; ?>
                     </tbody>

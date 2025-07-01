@@ -227,7 +227,9 @@ $conn->close();
       <!-- *Informações de saúde do animal -->
 
       <div class="form-group">
-        <label>Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *</label>
+<p style="text-align: justify;">
+  Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *
+</p>
         <div class="health-options">
           <label>
             <input type="radio" name="saude_animal" value="1" onclick="document.getElementById('details').style.display='block'" required />

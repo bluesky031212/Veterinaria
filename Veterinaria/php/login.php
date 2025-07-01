@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Verificar em usuários
+    // Verificar em usuários (clientes)
     $sqlUsuario = "SELECT id, nome, email, senha FROM usuarios WHERE email = ?";
     $stmtUsuario = $conn->prepare($sqlUsuario);
     $stmtUsuario->bind_param("s", $email);
@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['usuario_id'] = $rowUsuario['id'];
             $_SESSION['usuario_nome'] = $rowUsuario['nome'];
             $_SESSION['usuario_email'] = $rowUsuario['email'];
+            $_SESSION['tipo'] = 'cliente'; // 🔥 Define o tipo de usuário
             header("Location: /Veterinaria/php/dashboard.php");
             exit();
         } else {
@@ -49,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['vet_id'] = $rowVet['id'];
             $_SESSION['vet_nome'] = $rowVet['nome'];
             $_SESSION['vet_email'] = $rowVet['email'];
+            $_SESSION['tipo'] = 'veterinario'; // 🔥 Define o tipo de usuário
             header("Location: /Veterinaria/php/painel_vet.php");
             exit();
         } else {

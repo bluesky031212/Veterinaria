@@ -22,7 +22,7 @@
 
       <!-- *Nome do dono -->
       <div class="form-group">
-          <label>Nome completo *</label>
+          <label style="font-weight: normal; font-size: 15px;">Nome completo *</label>
           <input type="text" name="nome" required onblur="validarNome(this)" />
           <div class="invalid-feedback"></div>
       </div>
@@ -55,7 +55,7 @@
       <!-- *Telefone do dono -->
 
       <div class="form-group">
-        <label>Telefone *</label>
+        <label style="font-weight: normal; font-size: 15px;">Telefone *</label>
         <input type="tel" name="telefone" required pattern="9[0-9]{8}" placeholder="Ex: 912345678"
         oninput="this.value = this.value.slice(0,9)"/>
         <div id="telefone-feedback" class="invalid-feedback"></div>
@@ -85,27 +85,19 @@
       <!-- *E-mail do dono -->
 
       <div class="form-group">
-        <label>E-mail *</label>
+        <label style="font-weight: normal; font-size: 15px;">E-mail *</label>
         <input type="email" id="email" name="email" required maxlength="50" placeholder="Ex: nome@dominio.com"
         oninput="this.value = this.value.slice(0, 50)" />
-        <small class="text-muted">Máximo de 50 caracteres</small>
+        <small class="text-muted" style="font-weight: normal; font-size: 12px;">Máximo de 50 caracteres</small>
       </div>
 
       <!-- *Senha de acesso -->
 
       <div class="form-group">
-        <label>Senha *</label>
+        <label style="font-weight: normal; font-size: 15px;">Senha *</label>
         <input type="password" name="senha" required maxlength="30"
                oninput="this.value = this.value.slice(0, 30)" />
-        <small class="text-muted">Máximo de 30 caracteres</small>
-      </div>
-
-      <!-- *Idade do dono -->
-
-      <div class="form-group">
-        <label>Idade *</label>
-        <input type="number" name="idade" id="idade" required min="18" max="120" class="form-control">
-        <div id="idade-feedback" class="invalid-feedback"></div>
+        <small class="text-muted" style="font-weight: normal; font-size: 12px;">Máximo de 30 caracteres</small>
       </div>
 
       <!-- JS Validação de idade do dono -->
@@ -140,7 +132,7 @@
       <!-- *NIF -->
 
       <div class="form-group">
-        <label>NIF</label>
+        <label style="font-weight: normal; font-size: 15px;">NIF</label>
         <input type="tel" name="nif" id="nif" maxlength="9" pattern="[0-9]{9}" />
       </div>
 
@@ -151,7 +143,7 @@
       <!-- *Nome do animal -->
 
       <div class="form-group">
-            <label>Nome do animal *</label>
+            <label style="font-weight: normal; font-size: 15px;">Nome do animal *</label>
             <input type="text" name="nome_animal" required maxlength="50" onblur="validarNome_animal(this)" />
             <div class="invalid-feedback"></div>
       </div>
@@ -183,7 +175,7 @@
       <!-- *Tipo do animal -->
 
       <div class="form-group">
-          <label>Tipo de animal *</label>
+          <label style="font-weight: normal; font-size: 15px;">Tipo de animal *</label>
           <select name="tipo_animal" id="tipo_animal" required class="form-control">
               <option value="" disabled selected>Selecione o tipo</option>
               <option value="Cachorro">Cachorro</option>
@@ -198,7 +190,7 @@
       <!-- *Raça do animal -->
 
       <div class="form-group">
-        <label>Raça</label>
+        <label style="font-weight: normal; font-size: 15px;">Raça</label>
         <input type="text" name="raca_animal" placeholder="Sem Raça Definida/ Não sei..." oninput="validarRaca(this)" />
           <div class="invalid-feedback"></div>
       </div>
@@ -222,7 +214,7 @@
       <!-- *Idade do animal -->
 
      <div class="form-group">
-        <label>Idade do animal *</label>
+        <label style="font-weight: normal; font-size: 15px;">Idade do animal *</label>
         <input type="number" name="idade_animal" id="idade_animal" required oninput="validarIdadeAnimal.this">
         <div id="idade_animal-feedback" class="invalid-feedback"></div>
       </div>
@@ -262,7 +254,7 @@
       <!-- *Gênero do animal -->
 
       <div class="form-group">
-        <label>Gênero</label>
+        <label style="font-weight: normal; font-size: 15px;">Gênero</label>
         <select name="genero_animal" required>
           <option value="">Selecione...</option>
           <option value="Macho">Macho</option>
@@ -276,13 +268,15 @@
 
       
       <div class="form-group">
-        <label>Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *</label>
+<p style="font-weight: normal; font-size: 14px;">
+  Possui alergias, doenças, toma medicamentos ou já fez cirurgia? *
+</p>
         <div class="health-options">
-          <label>
+          <label style="font-weight: normal; font-size: 14px;">
             <input type="radio" name="saude_animal" value="1" onclick="document.getElementById('details').style.display='block'" required />
             Sim
           </label>
-          <label>
+          <label style="font-weight: normal; font-size: 14px;">
             <input type="radio" name="saude_animal" value="0" onclick="document.getElementById('details').style.display='none'" />
             Não
           </label>
@@ -299,9 +293,9 @@
       <div class="form-group">
         <label class="politica-label">
           <input type="checkbox" name="politica_privacidade" required />
-          <span>
+          <span style="font-weight: normal; font-size: 12px;">
             Eu li e concordo com a 
-            <a href="/Veterinaria/html/politica_privacidade.html" target="_blank">Política de Privacidade</a> da Clínica KGB.
+            <a href="/Veterinaria/html/politica_privacidade.html" target="_blank" style="color:black">Política de Privacidade</a> da Clínica KGB.
           </span>
         </label>
       </div>
@@ -323,7 +317,17 @@
           top: 0;
         }
         </style>
-        
+
+   <!-- *Idade-->
+      <div class="form-group">
+        <label class="politica-label">
+          <input type="checkbox" required />
+          <span style="font-weight: normal; font-size: 12px;">
+            Confirmo que sou maior de 18 anos e tenho capacidade legal para fornecer as informações solicitadas.
+        </span>
+        </label>
+      </div>
+
       <!-- *Botões de ação -->
 
       <div class="form-actions">

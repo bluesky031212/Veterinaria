@@ -10,13 +10,13 @@ include 'conexao.php';
 $usuario_id = $_SESSION['usuario_id'];
 
 $sql = "SELECT c.id, a.nome_animal, v.nome AS veterinario_nome, 
-               c.data_consulta, c.hora_consulta, a.saude_detalhe, 
-               c.status_consulta, c.descricao_consulta
+               c.data_consulta, c.hora_consulta, c.descricao_consulta, 
+               c.status_consulta
         FROM consultas c
         JOIN animais a ON c.animal_id = a.id
         JOIN veterinarios v ON c.veterinario_id = v.id
         WHERE a.usuario_id = ?
-        ORDER BY c.data_consulta DESC, a.saude_detalhe DESC";
+        ORDER BY c.data_consulta DESC";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
@@ -51,7 +51,6 @@ $conn->close();
             background-size: contain;
             text-align: center;
         }
-
 
         .tabela-container {
             max-width: 1200px;
@@ -96,27 +95,26 @@ $conn->close();
             font-weight: bold;
         }
 
-.cancelar-btn {
-    font-family: 'minecraft', sans-serif;
-    background-color: transparent;
-    background-image: url('/Veterinaria/images/butao2.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    color: white;
-    cursor: pointer;
-    font-size: 11px;
-    text-decoration: none;
-    height: 25px;
-    width: 110px;
-    border: none;
-    background-size: 100% 100%;
-    text-align: center;
-    line-height: 25px;
-    margin: auto;
-    display: block; /* 👈 Isso garante alinhamento no centro da <td> */
-}
-
+        .cancelar-btn {
+            font-family: 'minecraft', sans-serif;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+            text-decoration: none;
+            height: 25px;
+            width: 110px;
+            border: none;
+            background-size: 100% 100%;
+            text-align: center;
+            line-height: 25px;
+            margin: auto;
+            display: block;
+        }
 
         .voltar {
             font-family: 'minecraft', sans-serif;
@@ -141,7 +139,8 @@ $conn->close();
         }
 
         .voltar:hover,
-        .cancelar-btn:hover {
+        .cancelar-btn:hover,
+        .detalhes-btn:hover {
             background-image: url('/Veterinaria/images/butao1.png');
             transform: scale(1.05);
         }
@@ -150,6 +149,26 @@ $conn->close();
             margin-top: 20px;
             display: flex;
             justify-content: center;
+        }
+
+        .detalhes-btn {
+            font-family: 'minecraft', sans-serif;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+            text-decoration: none;
+            height: 25px;
+            width: 110px;
+            display: block;
+            text-align: center;
+            line-height: 25px;
+            margin: auto;
+            border: none;
         }
     </style>
 </head>
@@ -169,7 +188,7 @@ $conn->close();
                     <th>Data</th>
                     <th>Hora</th>
                     <th>Status</th>
-                    <th>Descrição</th>
+                    <th>Detalhes</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -179,14 +198,14 @@ $conn->close();
                         <td><?= htmlspecialchars($consulta['nome_animal']) ?></td>
                         <td><?= htmlspecialchars($consulta['veterinario_nome']) ?></td>
                         <td><?= date('d/m/Y', strtotime($consulta['data_consulta'])) ?></td>
-                        <?php
-                        $hora = new DateTime($consulta['hora_consulta']);
-                        ?>
+                        <?php $hora = new DateTime($consulta['hora_consulta']); ?>
                         <td><?= htmlspecialchars($hora->format('H:i')) ?></td>
                         <td class="status-<?= htmlspecialchars($consulta['status_consulta']) ?>">
                             <?= ucfirst(htmlspecialchars($consulta['status_consulta'])) ?>
                         </td>
-                        <td><?= htmlspecialchars($consulta['saude_detalhe']) ?></td>
+                        <td>
+                            <a href="response_medico.php?id=<?= $consulta['id'] ?>" target="_blank" class="detalhes-btn">Ver Detalhes</a>
+                        </td>
                         <td>
                             <?php if ($consulta['status_consulta'] === 'agendada'): ?>
                                 <form action="cancelar_consulta.php" method="POST" onsubmit="return confirm('Tem certeza que deseja cancelar esta consulta?');">
@@ -207,7 +226,7 @@ $conn->close();
         </div>
     </div>
 <?php else: ?>
-    <div style="text-align:center; font-size:18px;">Você ainda não marcou nenhuma consulta.</div>
+    <div style="text-align:center; font-size:18px; color: white;">Você ainda não marcou nenhuma consulta.</div>
 <?php endif; ?>
 
 </body>

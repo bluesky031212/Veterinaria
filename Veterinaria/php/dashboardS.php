@@ -97,7 +97,7 @@ $opcoesHorario = gerarOpcoesHorario();
 <head>
     <meta charset="UTF-8">
     <title>Área do Cliente</title>
-      <style>
+    <style>
 
         @font-face {
     font-family: 'MinecraftRegular';
@@ -422,11 +422,9 @@ $opcoesHorario = gerarOpcoesHorario();
 
                         <h3>Escolha o horário:</h3>
             <select name="hora_consulta" id="hora_consulta" required>
-                <option value="" disabled selected>Selecione a data</option>
+                <option value="" disabled selected>Selecione a data e o veterinário</option>
             </select>
-             <h3>Motivo da Consulta:</h3>
-            <textarea name="motivo" id="motivo" maxlength="100" required rows="3" cols="40"
-            placeholder="Descreva brevemente o motivo da consulta (até 100 caracteres)"></textarea>
+
             <br><br>
             <button type="submit" class="agendar-button">Confirmar Agendamento</button>
         </form>
@@ -546,20 +544,6 @@ document.querySelectorAll('.cancelar-edicao').forEach(btn => {
         document.getElementById('nome-animal-' + id).style.display = 'block';
     });
 });
-
 </script>
-
-<script>
-document.getElementById('form-agendamento').addEventListener('submit', function(event) {
-    const motivoTextarea = document.getElementById('motivo');
-    const textoOriginal = motivoTextarea.value.trim();
-    
-    if (textoOriginal && !textoOriginal.startsWith("Motivo da Consulta:")) {
-        motivoTextarea.value = "Motivo da Consulta:\n" + textoOriginal;
-    }
-});
-</script>
-
-
 
 </body>

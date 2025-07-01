@@ -135,6 +135,7 @@ a.voltar {
   transition: background-image 0.3s ease-in-out;
   height: 38px;
   min-width: 100px;
+  line-height: 38px;
 }
 
 .form-actions button {
