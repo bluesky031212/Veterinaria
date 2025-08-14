@@ -33,6 +33,16 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Minhas Consultas</title>
     <style>
+
+        @font-face {
+  font-family: 'MinecraftRegular';
+  src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'minecraft';
+  src: url(/Veterinaria/fonts/MinecraftRegular-Bmg3.otf) format('opentype');
+}
         body {
             font-family: sans-serif;
             margin: 0;
@@ -44,13 +54,25 @@ $conn->close();
             background-attachment: fixed;
         }
 
-        header {
-            padding: 30px;
-            background-color: transparent;
-            background-position: center;
-            background-size: contain;
-            text-align: center;
-        }
+header {
+  padding: 30px;
+  background-color: transparent;
+  background-position: center;
+  font-family: 'MinecraftRegular';
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 5.3px;
+  text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+header img {
+  width: 60px;
+  height: 25px;
+  vertical-align: middle;
+}
 
         .tabela-container {
             max-width: 1200px;
@@ -224,10 +246,14 @@ $conn->close();
         <div class="botao-container">
             <button class="voltar" onclick="window.location.href='dashboard.php'">Voltar para minha área</button>
         </div>
+
+        <?php else: ?>
+            <div class="tabela-container">
+    <div style="text-align:center; font-size:18px; color: white;  color: white;">Você ainda não marcou nenhuma consulta.</div>
     </div>
-<?php else: ?>
-    <div style="text-align:center; font-size:18px; color: white;">Você ainda não marcou nenhuma consulta.</div>
 <?php endif; ?>
+    </div>
+
 
 </body>
 </html>

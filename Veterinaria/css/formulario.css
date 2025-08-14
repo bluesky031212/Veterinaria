@@ -116,7 +116,7 @@ textarea {
   margin-top: 20px;
 }
 
-.form-actions button,
+.form-actions button, submit,
 a.voltar {
   display: flex;
   align-items: center;

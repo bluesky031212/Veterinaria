@@ -8,6 +8,8 @@
     font-family: 'minecraft';
   }
 
+
+
   h1 {
   background-image: url(/Veterinaria/images/logo.png);
   background-repeat: no-repeat;
@@ -40,6 +42,22 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+
+      .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .alert-success {
+      color: #37e25fff;
+    }
+    .alert-error {
+      color: #721c24;
+    }
+    .alert-warning {
+      color: #856404;
+    }
 
   .container {
    background-color:rgba(118, 118, 118, 0.564);

@@ -1,5 +1,5 @@
 <?php
-session_start(); // alterado
+session_start();
 include("conexao.php");
 
 $nome = $_POST['nome'];
@@ -18,7 +18,7 @@ $raca_animal = $_POST['raca_animal'] ?? null;
 $idade_animal = $_POST['idade_animal'] ?? null;
 $genero_animal = $_POST['genero_animal'] ?? null;
 $saude_animal = $_POST['saude_animal'] ?? 'Não informado';
-$saude_detalhe = $_POST['sdetalhes_saude'] ?? '';  // Corrigido para $saude_detalhe
+$saude_detalhe = $_POST['sdetalhes_saude'] ?? ''; // Corrigido
 
 // Verifica se o email já está cadastrado
 $stmt_check = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
@@ -28,30 +28,34 @@ $stmt_check->store_result();
 
 if ($stmt_check->num_rows > 0) {
     // Email já existe
-    echo "<script>alert('Este email já está cadastrado.'); window.history.back();</script>";
+    header("Location: /Veterinaria/index.php?erro=2"); // erro=2 → email duplicado
     exit();
 }
 
-// Se a saúde do animal for informada como "1", inclui os detalhes de saúde
+// Se a saúde do animal for informada como "1", inclui os detalhes
 if ($saude_animal === "1" && !empty($saude_detalhe)) {
     $saude_animal = "1: " . $saude_detalhe;
 }
 
-$raca_animal = trim($_POST['raca_animal']);
+$raca_animal = trim($raca_animal);
 if (empty($raca_animal)) {
     $raca_animal = "Sem raça definida ou não sabe";
 }
 
-// Insere o usuário na tabela de usuários
-$stmt_user = $conn->prepare("INSERT INTO usuarios (nome, email, senha, telefone, nif, idade, aceitou_politica) VALUES (?, ?, ?, ?, ?, ?, ?)");
+// Insere o usuário
+$stmt_user = $conn->prepare("
+    INSERT INTO usuarios (nome, email, senha, telefone, nif, idade, aceitou_politica) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+");
 $stmt_user->bind_param("sssssis", $nome, $email, $senha, $telefone, $nif, $idade, $aceitou_politica);
 $stmt_user->execute();
-$usuario_id = $stmt_user->insert_id; // ID do usuário recém inserido
+$usuario_id = $stmt_user->insert_id;
 
-// Agora insere o animal com o ID do usuário
-$stmt_animal = $conn->prepare("INSERT INTO animais (usuario_id, nome_animal, tipo_animal, porte_animal, raca_animal, idade_animal, genero_animal, saude_animal, saude_detalhe) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
+// Insere o animal vinculado ao usuário
+$stmt_animal = $conn->prepare("
+    INSERT INTO animais (usuario_id, nome_animal, tipo_animal, porte_animal, raca_animal, idade_animal, genero_animal, saude_animal, saude_detalhe) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
 $stmt_animal->bind_param(
     "issssisis",
     $usuario_id,
@@ -64,21 +68,16 @@ $stmt_animal->bind_param(
     $saude_animal,
     $saude_detalhe
 );
-
 $stmt_animal->execute();
 
-// Verifica se a inserção foi bem-sucedida
+// Redireciona conforme o resultado
 if ($stmt_user->affected_rows > 0 && $stmt_animal->affected_rows > 0) {
-    echo "<script>
-        alert('Cadastro realizado com sucesso!');
-        window.location.href = '/Veterinaria/php/telacarregamento.php';
-    </script>";
+    header("Location: /Veterinaria/index.php?sucesso=1");
     exit();
 } else {
-    echo "<script>alert('Ocorreu um erro durante o cadastro. Tente novamente mais tarde.'); window.history.back();</script>";
+    header("Location: /Veterinaria/index.php?erro=1");
     exit();
 }
 
 // Fecha a conexão
 $conn->close();
-?>
