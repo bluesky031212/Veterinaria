@@ -1,0 +1,250 @@
+
+        @font-face {
+    font-family: 'MinecraftRegular';
+    src: url(/Veterinaria/fonts/Minercraftory.ttf) format('truetype');
+    font-family: 'minecraft';
+    src: url(/Veterinaria/fonts/MinecraftRegular-Bmg3.otf)
+        }
+        h1 {
+            font-family: 'minecraft';
+            color: white;
+        }
+        body {
+            font-family: 'minecraft';
+            margin: 0;
+            padding: 0;
+            background-image: url(/Veterinaria/images/background.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        header {
+        padding: 30px;
+        background-color: transparent;
+        background-position: center;
+        font-family: 'MinecraftRegular';
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 15px;
+        letter-spacing: 5.3px;
+        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        color: rgb(190, 190, 190);
+        }
+
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color:rgba(118, 118, 118, 0.77);
+            border-radius: 10px;
+            border: black 3px solid;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .animais-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .animal-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 150px; /* ou ajuste conforme necessário */
+        }
+
+        .animal-card img {
+            width: 120px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .animal-card img:hover {
+            border: 2px solid #007BFF;
+        }
+
+        .animal-nome {
+        display: flex;
+        justify-content: center;   /* Centraliza horizontalmente */
+        align-items: center;       /* Alinha verticalmente */
+        gap: 6px;                  /* Espaço entre nome e lápis */
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        }
+        .edit-nome-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        color: white;
+        padding: 0;
+        }
+
+                .mensagem-sucesso {
+            color:rgb(68, 255, 71); /* ou qualquer outra cor */
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .mensagem-erro {
+            color:rgb(255, 72, 72); /* ou qualquer outra cor */
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .mensagem {
+            font-family: 'minecraft';
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 40px auto;
+            padding: 20px;
+            color: white;
+            width: 50%;
+            background-color: rgba(255, 251, 251, 0.31);
+            border: 1px solid black;
+            border-radius: 10%;
+        }
+
+        #calendario-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #calendario-container form {
+            text-align: center;
+        }   
+
+        input[type="date"],
+        input[type="time"],
+        select[name="hora_consulta"],
+        select[name="veterinario_id"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+            width: 240px;
+            margin-bottom: 15px;
+        }
+
+        .botoes-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .agendar-button {
+            display: inline-block;
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            height: 48px;
+            width: 250px;
+            line-height: 48px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .button {
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            width: 220px;
+            line-height: 48px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .excluir-button {
+            font-family: 'minecraft', sans-serif;
+            padding: 0 25px;
+            background-color: transparent;
+            background-image: url('/Veterinaria/images/butao2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            height: 48px;
+            width: 150px;
+            line-height: 48px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+
+        input[type="date"]:invalid,
+        select:invalid {
+            border-color: red;
+        }
+
+        .button:hover,
+        .agendar-button:hover,
+        .excluir-button:hover {
+            background-image: url('/Veterinaria/images/butao1.png');
+            transform: scale(1.05);
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 5px;
+            font-size: 10px;
+            background-color: #76767671;
+            margin-top: 40px;
+            border: rgba(0, 0, 0, 0.5) 2px solid;
+        }
+
+
+        .edit-nome-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 5px;
+    color: white;
+}
+.edit-nome-btn:hover {
+    color: yellow;
+}
+.inline-edit-form input[type="text"] {
+    padding: 5px;
+    border-radius: 5px;
+}
+        

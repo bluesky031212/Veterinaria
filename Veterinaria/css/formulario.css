@@ -14,7 +14,7 @@ body {
   font-family: 'minecraft';
   margin: 0;
   padding: 0;
-  background-image: url(/Veterinaria/images/background.png);
+  background-image: url(/Veterinaria/images/background.svg);
   background-size: 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -33,7 +33,7 @@ header {
   font-size: 15px;
   letter-spacing: 5.3px;
   text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-  color: rgb(190, 190, 190);
+  color: white;
 }
 
 header img {
@@ -139,7 +139,7 @@ a.voltar {
 }
 
 .form-actions button {
-  background-image: url('/Veterinaria/images/butao2.png');
+  background-image: url('/Veterinaria/images/butao2.svg');
   transform: scale(1.05);
 }
 
@@ -150,7 +150,7 @@ a.voltar:hover {
 }
 
 a.voltar {
-  background-image: url('/Veterinaria/images/butao2.png');
+  background-image: url('/Veterinaria/images/butao2.svg');
   transform: scale(1.05);
 }
 

@@ -42,12 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- Formulário HTML simples -->
 <!DOCTYPE html>
 <html lang="pt">
-<head>
+<header>
     <meta charset="UTF-8">
     <title>Cadastrar Veterinário</title>
-</head>
+        <h2>Cadastrar Veterinário</h2>
+</header>
+ <link rel="stylesheet" href="/Veterinaria/css/formulario.css" />
 <body>
-    <h2>Cadastrar Veterinário</h2>
+<div class="formulario-container">
+<div class="form-group">
     <?php if ($msg): ?>
         <p><?= htmlspecialchars($msg) ?></p>
     <?php endif; ?>
@@ -56,7 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Telefone: <input type="text" name="telefone" required></label><br>
         <label>Email: <input type="email" name="email" required></label><br>
         <label>Senha: <input type="password" name="senha" required></label><br><br>
+        <div class="form-actions">
         <button type="submit">Cadastrar</button>
+        </div>
     </form>
+    </div>
+    </div>
 </body>
 </html>

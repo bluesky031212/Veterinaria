@@ -36,7 +36,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url(/Veterinaria/images/background.png);
+    background-image: url(/Veterinaria/images/background.svg);
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -67,7 +67,7 @@
 
   .btn {
     padding: 10px;
-    background-image: url(/Veterinaria/images/butao2.png);
+    background-image: url(/Veterinaria/images/butao2.svg);
     border: none;
     color: white;
     border-radius: 5px;
